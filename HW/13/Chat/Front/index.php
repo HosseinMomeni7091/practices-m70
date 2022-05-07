@@ -1,6 +1,55 @@
 <?php
 include "../assets/filesystem.php";
+include_once "../Storage/DB/DatabaseConnectionInterface.php";
+include_once "../Storage/DB/MySqlDatabaseConnection.php";
+include_once "../Storage/DB/DatabaseInterface.php";
+include_once "../Storage/DB/MySqlDatabase.php";
 $username = $_COOKIE["username"];
+
+//storage method
+$StorageMethod = json_decode(read_file("config.json"), true);
+if ($StorageMethod["Save_mode"] == "DB") {
+  $connection = MySqlDatabaseConnection::getInstance();
+  $pdo1 = $connection->getConnection('localhost', 'root', '', 'chatroom');
+  $stmt = $pdo1->prepare("SELECT * FROM Users WHERE username=:id");
+  $stmt->execute(["id"=>$username]);
+  $userjsonarray = $stmt->fetchAll();
+  $jsoncurrentname = $userjsonarray[0]["name"];
+  $jsoncurrentbio = $userjsonarray[0]["bio"];
+  $jsoncurrentpermission = $userjsonarray[0]["permission"];
+  $jsoncurrentmainpicture = $userjsonarray[0]["main_profile_image"];
+
+  $stmt2 = $pdo1->prepare("SELECT Profile_images.image_id, Profile_images.address FROM Users JOIN Profile_images on Users.username=Profile_images.username WHERE Users.username=:id");
+  $stmt2->execute(["id"=>$username]);
+  $userjsonarray2 = $stmt2->fetchAll();
+  $jsoncurrenttotalpicture = $userjsonarray2;
+  echo '<pre>';
+  print_r($jsoncurrenttotalpicture);
+  echo '</pre>'.'<br>';
+} else {
+  $userjsonarray = json_decode(read_file("users.json"), true);
+  echo '<pre>';
+  print_r($userjsonarray);
+  echo '</pre>'.'<br>';
+  $jsoncurrentname = $userjsonarray[$username]["name"];
+  $jsoncurrentbio = $userjsonarray[$username]["bio"];
+  $jsoncurrentpermission = $userjsonarray[$username]["permission"];
+  $jsoncurrentmainpicture = $userjsonarray[$username]["main_profile_image"];
+  $jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
+}
+
+
+
+?>
+<!-- Prepare the data -->
+<?php
+$userjsonarray = json_decode(read_file("users.json"), true);
+$jsoncurrentname = $userjsonarray[$username]["name"];
+$jsoncurrentbio = $userjsonarray[$username]["bio"];
+$jsoncurrentpermission = $userjsonarray[$username]["permission"];
+$jsoncurrentmainpicture = $userjsonarray[$username]["main_profile_image"];
+$jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
+
 ?>
 
 <!DOCTYPE html>
@@ -62,15 +111,7 @@ $username = $_COOKIE["username"];
 
       <!-- Add margin if you want to see some of the overlay behind the modal-->
       <div class="modal-content py-4 text-left px-6">
-        <!-- Prepare the data -->
-        <?php
-        $userjsonarray = json_decode(read_file("users.json"), true);
-        $jsoncurrentname = $userjsonarray[$username]["name"];
-        $jsoncurrentbio = $userjsonarray[$username]["bio"];
-        $jsoncurrentpermission = $userjsonarray[$username]["permission"];
-        $jsoncurrentmainpicture = $userjsonarray[$username]["main_profile_image"];
-        $jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
-        ?>
+
         <!--Title-->
         <div class="flex justify-between items-center pb-3">
           <p class="text-xl font-bold">Hi dear <?php echo $jsoncurrentname; ?></p>
@@ -108,7 +149,7 @@ $username = $_COOKIE["username"];
               };
               ?>
               <!-- Send Botton -->
-              <button  class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-black py-2 px-4 border border-blue-800 hover:border-transparent rounded" name="submit">Update</button></br>
+              <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-black py-2 px-4 border border-blue-800 hover:border-transparent rounded" name="submit">Update</button></br>
             </div>
             <!-- prepare main image to show -->
             <?php
