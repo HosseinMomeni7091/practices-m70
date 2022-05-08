@@ -2,7 +2,7 @@
 
 echo "Allah";
 include "../assets/filesystem.php";
-define("STORAGE_PATH", "C:/xampp/htdocs/Train/CW/CW15.1400.12.27/Storage/upload/");
+define("STORAGE_PATH", __DIR__."/../Storage/upload/");
 $username = $_COOKIE["username"];
 echo "Upload file.php";
 echo '<pre>';
@@ -19,7 +19,7 @@ if (isset($_FILES["myfile"])){
     echo '</pre>'.'<br>';
     $imgname=$_FILES["myfile"]["name"];
     $temp=$_FILES["myfile"]["tmp_name"];
-    $target_file = "C:/xampp/htdocs/Train/CW/CW15.1400.12.27/Storage/upload/".$imgname;
+    $target_file = __DIR__."/../Storage/upload/".$imgname;
     echo $target_file;
     move_uploaded_file($temp, $target_file);
     

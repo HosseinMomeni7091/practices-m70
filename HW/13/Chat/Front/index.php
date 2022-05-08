@@ -11,31 +11,126 @@ $StorageMethod = json_decode(read_file("config.json"), true);
 if ($StorageMethod["Save_mode"] == "DB") {
   $connection = MySqlDatabaseConnection::getInstance();
   $pdo1 = $connection->getConnection('localhost', 'root', '', 'chatroom');
-  $stmt = $pdo1->prepare("SELECT * FROM Users WHERE username=:id");
-  $stmt->execute(["id"=>$username]);
-  $userjsonarray = $stmt->fetchAll();
-  $jsoncurrentname = $userjsonarray[0]["name"];
-  $jsoncurrentbio = $userjsonarray[0]["bio"];
-  $jsoncurrentpermission = $userjsonarray[0]["permission"];
-  $jsoncurrentmainpicture = $userjsonarray[0]["main_profile_image"];
 
-  $stmt2 = $pdo1->prepare("SELECT Profile_images.image_id, Profile_images.address FROM Users JOIN Profile_images on Users.username=Profile_images.username WHERE Users.username=:id");
-  $stmt2->execute(["id"=>$username]);
+  // users info---------------------
+  $stmt = $pdo1->prepare("SELECT * FROM Profile_images right JOIN Users on Users.username = Profile_images.username;");
+  $stmt->execute();
+  $userjsonarray0 = $stmt->fetchAll();
+
+  $userjsonarray = [];
+  $temp_comparison = "1";
+  foreach ($userjsonarray0 as $key => $value) {
+    if ($value["username"] != $temp_comparison) {
+      $temp_comparison = $value["username"];
+      $userjsonarray[$value["username"]] = $value;
+      $userjsonarray[$value["username"]]["other_profile_image"] = [];
+      $userjsonarray[$value["username"]]["other_profile_image"][] = $value["other_profile_image"];
+    } else {
+      $temp_comparison = $value["username"];
+      $userjsonarray[$value["username"]]["other_profile_image"][] = $value["other_profile_image"];
+    }
+  }
+
+  echo '<pre>****Koll user  ghabl***';
+  print_r($userjsonarray0);
+  echo '</pre>' . '<br>';
+  echo '<pre>****Koll user  bad***';
+  print_r($userjsonarray);
+  echo '</pre>' . '<br>';
+
+
+  // current user info---------------------
+  $stmt = $pdo1->prepare("SELECT * FROM Users WHERE username=:id");
+  $stmt->execute(["id" => $username]);
+  $userjsonarray1 = $stmt->fetchAll();
+  echo '<pre>**** karbar ghabl******';
+  print_r($userjsonarray1);
+  echo '</pre>' . '<br>';
+  $jsoncurrentname = $userjsonarray1[0]["name"];
+  $jsoncurrentbio = $userjsonarray1[0]["bio"];
+  $jsoncurrentpermission = $userjsonarray1[0]["permission"];
+  $jsoncurrentmainpicture = $userjsonarray1[0]["main_profile_image"];
+  echo '<pre>**** karbar bad******';
+  print_r($jsoncurrentmainpicture);
+  echo '</pre>' . '<br>';
+
+  // user images---------------------
+  $stmt2 = $pdo1->prepare("SELECT Profile_images.image_id, Profile_images.other_profile_image FROM Users JOIN Profile_images on Users.username=Profile_images.username WHERE Users.username=:id");
+  $stmt2->execute(["id" => $username]);
   $userjsonarray2 = $stmt2->fetchAll();
-  $jsoncurrenttotalpicture = $userjsonarray2;
+  $userjsonarray3 = [];
+  foreach ($userjsonarray2 as $key => $value) {
+    $userjsonarray3[$value["image_id"]] = $value["other_profile_image"];
+  }
+  $jsoncurrenttotalpicture = $userjsonarray3;
   echo '<pre>';
   print_r($jsoncurrenttotalpicture);
-  echo '</pre>'.'<br>';
+  echo '</pre>' . '<br>';
+
+  // user chat and seen status---------------------
+  $stmt3 = $pdo1->prepare("SELECT * FROM(( Users JOIN Chatroom on Users.username=Chatroom.username) left join SeenStatus on Chatroom.massage_id=SeenStatus.massage_id)");
+  $stmt3->execute();
+  $totalchat0 = $stmt3->fetchAll();
+  echo '<pre>***chat ghabe Amade shadan***';
+  print_r($totalchat0);
+  echo '</pre>' . '<br>';
+  $totalchat = [];
+  $stick=0;
+  foreach ($totalchat0 as $key => $value) {
+    echo "key :".$key."</br>";
+    echo '<pre>val:';
+    print_r($value);
+    echo '</pre>'.'<br>';
+    echo "username :".$totalchat0[$key]["username"]."</br>";
+    echo "massage :".$totalchat0[$key]["massage"]."</br>";
+    if ($key=="0"){
+      $totalchat[$key] = [
+        "username" => $value["username"],
+        "massage" => $value["massage"],
+        "seen_by" => [$value["user_id"]]
+      ];
+      echo '<pre>';
+      print_r($totalchat[$key]);
+      echo '</pre>'.'<br>';
+    }else{
+      if (($totalchat0[$key]["username"]==$totalchat0[$key-1]["username"])&&($totalchat0[$key]["massage"]==$totalchat0[$key-1]["massage"])) {
+        $totalchat[$stick]["seen_by"][] = $value["user_id"];
+        echo "Stick ::".$stick.'<br>';
+        echo '<pre>';
+        print_r($totalchat[$stick]);
+        echo '</pre>'.'<br>';
+      } else {
+        $stick=$key;
+        echo "Stick ::".$stick.'<br>';
+        $totalchat[$key] = [
+          "username" => $value["username"],
+          "massage" => $value["massage"],
+          "seen_by" => [$value["user_id"]]
+        ];
+        echo '<pre>';
+        print_r($totalchat[$key]);
+        echo '</pre>'.'<br>';
+      }
+    }
+    
+  }
+  echo '<pre>******chat bade amade shodan*****';
+  print_r($totalchat);
+  echo '</pre>' . '<br>';
 } else {
+  // user info ------------------------
+  echo "json mode";
   $userjsonarray = json_decode(read_file("users.json"), true);
   echo '<pre>';
   print_r($userjsonarray);
-  echo '</pre>'.'<br>';
+  echo '</pre>' . '<br>';
   $jsoncurrentname = $userjsonarray[$username]["name"];
   $jsoncurrentbio = $userjsonarray[$username]["bio"];
   $jsoncurrentpermission = $userjsonarray[$username]["permission"];
   $jsoncurrentmainpicture = $userjsonarray[$username]["main_profile_image"];
   $jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
+  // total chat ------------------------
+  $totalchat = json_decode(read_file('chatroom.json'), true);
 }
 
 
@@ -43,13 +138,13 @@ if ($StorageMethod["Save_mode"] == "DB") {
 ?>
 <!-- Prepare the data -->
 <?php
-$userjsonarray = json_decode(read_file("users.json"), true);
-$jsoncurrentname = $userjsonarray[$username]["name"];
-$jsoncurrentbio = $userjsonarray[$username]["bio"];
-$jsoncurrentpermission = $userjsonarray[$username]["permission"];
-$jsoncurrentmainpicture = $userjsonarray[$username]["main_profile_image"];
-$jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
-
+// $userjsonarray = json_decode(read_file("users.json"), true);
+// $jsoncurrentname = $userjsonarray[$username]["name"];
+// $jsoncurrentbio = $userjsonarray[$username]["bio"];
+// $jsoncurrentpermission = $userjsonarray[$username]["permission"];
+// $jsoncurrentmainpicture = $userjsonarray[$username]["main_profile_image"];
+// $jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
+echo "1";
 ?>
 
 <!DOCTYPE html>
@@ -137,8 +232,8 @@ $jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
               <!-- Upload file -->
               <label for="file">Upload your new picture :(max 4 pictures)</label></br>
               <?php
-              $user_jns = json_decode(read_file("users.json"), true);
-              if (count($user_jns[$username]["other_profile_image"]) < 4) {
+              // $user_jns = json_decode(read_file("users.json"), true);
+              if (count($jsoncurrenttotalpicture) < 4) {
               ?>
                 <input id="jprofileupload" type="file" name="file"></br>
               <?php
@@ -153,10 +248,14 @@ $jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
             </div>
             <!-- prepare main image to show -->
             <?php
-            if (count($jsoncurrentmainpicture) == 0) {
+            if ($jsoncurrentmainpicture == "") {
               $editedaddressmainpic = "../Storage/first.png";
             } else {
-              $index_of_total = $jsoncurrentmainpicture[0];
+              if (is_array($jsoncurrentmainpicture)) {
+                $index_of_total = $jsoncurrentmainpicture[0];
+              } else {
+                $index_of_total = $jsoncurrentmainpicture;
+              }
               $editedaddressmainpic = preg_replace("/.*(?=\/Storage\/)/", ".", $jsoncurrenttotalpicture[$index_of_total]);
             }
             ?>
@@ -240,15 +339,23 @@ $jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
     <div class=" w-[500px] h-[300px] overflow-scroll p-6 border-red-600 ">
       <!-- userprofile preparation -->
       <?php
-      $chat = json_decode(read_file('chatroom.json'), true);
-      foreach ($chat as $key => $value) {
+      foreach ($totalchat as $key => $value) {
         $firstimage = $userjsonarray[$value["username"]]["main_profile_image"];
-        if (count($firstimage) == 0) {
-          $imgprof = "../Storage/first.png";
-        } else {
-          $index_of_total2 = $firstimage[0];
-          $imgprof = preg_replace("/.*(?=\/Storage\/)/", ".", $userjsonarray[$value["username"]]["other_profile_image"][$index_of_total2]);
-        }
+          if (is_array($firstimage)) {
+            if (count($firstimage)==0){
+              $imgprof = "../Storage/first.png";
+            }else{
+              $index_of_total2 = $firstimage[0];
+              $imgprof = preg_replace("/.*(?=\/Storage\/)/", ".", $userjsonarray[$value["username"]]["other_profile_image"][$index_of_total2]);
+            }
+          } else {
+            if($firstimage == ""){
+              $imgprof = "../Storage/first.png";
+            }else{
+              $index_of_total2 = $firstimage;
+              $imgprof = preg_replace("/.*(?=\/Storage\/)/", ".", $userjsonarray[$value["username"]]["other_profile_image"][$index_of_total2]);
+              }
+            }
       ?>
         <!-- Print User chat -->
         <!-- chatter profile print -->
@@ -264,16 +371,49 @@ $jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
             echo $value["massage"];
             // Trace of seen message
             if ($value["username"] != $username) {
-              if (!in_array($username, $chat[$key]["seen_by"])) {
-                $chat[$key]["seen_by"][] = $username;
+              if (!in_array($username, $totalchat[$key]["seen_by"])) {
+
+                if ($StorageMethod["Save_mode"] == "DB") {
+
+                  // search id in DB------------------------
+                  $stmt9 = $pdo1->prepare("SELECT Chatroom.massage_id FROM Users JOIN Chatroom on Users.username = Chatroom.username where Users.username=? and Chatroom.massage=?;");
+                  $stmt9->execute([$value["username"],$value["massage"]]);
+                  $result_pdo1 = $stmt9->fetchAll();
+                  $massage_id = $result_pdo1[0]["massage_id"];
+
+                  //add user as viewer to DB------------------------
+                  $stmt6 = $pdo1->prepare("INSERT INTO SeenStatus (massage_id,user_id)
+                  VALUES (?,?);");
+                  $stmt6->execute([$massage_id, $username]);
+                  $result_pdo2 = $stmt6->fetchAll();
+                } else {
+                  $totalchat[$key]["seen_by"][] = $username;
+                }
               }
             }
           } else {
             $chateditedaddress = preg_replace("/.*(?=\/Storage\/)/", ".", $value["massage"]);
             // Trace of seen picture
+
+
             if ($value["username"] != $username) {
-              if (!in_array($username, $chat[$key]["seen_by"])) {
-                $chat[$key]["seen_by"][] = $username;
+              if (!in_array($username, $totalchat[$key]["seen_by"])) {
+                if ($StorageMethod["Save_mode"] == "DB") {
+
+                  // search id in DB------------------------
+                  $stmt9 = $pdo1->prepare("SELECT Chatroom.massage_id FROM Users JOIN Chatroom on Users.username = Chatroom.username where Users.username=? and Chatroom.massage=?;");
+                  $stmt9->execute([$value["username"],$value["massage"]]);
+                  $result_pdo1 = $stmt9->fetchAll();
+                  $massage_id = $result_pdo1[0]["massage_id"];
+
+                  //add user as viewer to DB------------------------
+                  $stmt6 = $pdo1->prepare("INSERT INTO SeenStatus (massage_id,user_id)
+                  VALUES (?,?);");
+                  $stmt6->execute([$massage_id, $username]);
+                  $result_pdo2 = $stmt6->fetchAll();
+                } else {
+                  $totalchat[$key]["seen_by"][] = $username;
+                }
               }
             }
           ?>
@@ -288,7 +428,7 @@ $jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
           <?php
           if ((($jsoncurrentpermission == "admin") || ($value["username"] == $username)) && ($number == 0)) {
           ?>
-            <input class="w-3 border-red-600 border-solid" type="text" id="edittext-<?php echo $key; ?>">
+            <input class="w-18 border-red-600 border-solid" type="text" id="edittext-<?php echo $key; ?>">
             <button onclick="jedit(this)" data-index="<?php echo $key; ?>">Edit</button>
 
           <?php } ?>
@@ -316,7 +456,7 @@ $jsoncurrenttotalpicture = $userjsonarray[$username]["other_profile_image"];
         <?php
         echo "</br>";
         //the end of edite of chat for trace of seen message
-        write_file('chatroom.json', json_encode($chat));
+        write_file('chatroom.json', json_encode($totalchat));
       }
         ?>
         </div>
