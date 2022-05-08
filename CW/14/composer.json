@@ -1,0 +1,15 @@
+{
+    "name": "pj/cw14",
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "parsaJadidi",
+            "email": "parsajad23@gmail.com"
+        }
+    ],
+    "require": {}
+}
