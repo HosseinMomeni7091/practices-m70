@@ -14,7 +14,7 @@ if ($_FILES["file"]["name"]!=""){
     preg_match_all("/\.\w+$/",$_FILES["file"]["name"],$all);
     $exten=$all[0][0];
     $temp=$_FILES["file"]["tmp_name"];
-    $target_file = "C:/xampp/htdocs/Train/CW/CW15.1400.12.27/Storage/upload/".$fakename.$exten;
+    $target_file = __DIR__."/../Storage/upload/".$fakename.$exten;
     echo $target_file;
     move_uploaded_file($temp, $target_file);
     

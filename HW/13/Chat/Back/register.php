@@ -1,6 +1,10 @@
 <?php
 include "../assets/filesystem.php";
 $pas="../Storage/";
+include_once "../Storage/DB/DatabaseConnectionInterface.php";
+include_once "../Storage/DB/MySqlDatabaseConnection.php";
+include_once "../Storage/DB/DatabaseInterface.php";
+include_once "../Storage/DB/MySqlDatabase.php";
 
 // get data and add to users.json file
 // -------------------------------------------------------------------
@@ -96,27 +100,41 @@ foreach ($users as $key => $value){
 
 
 
-// Create Json file foreach user
+// Create Json file foreach user/Data Base
 //----------------------------------------------------------------------------
 if ($username=="admin"){
     $permission="admin";
 }else{
     $permission="user";
 }
-$user=[
-    'name' => $name,
-    'bio' => "BIO",
-    'username'=>$username,
-    'password'=>$password,
-    'email'=>$email,
-    'permission' => $permission,
-    'seen_messages'=>[],
-    'main_profile_image'=>[],
-    'other_profile_image'=>[],
-];
-$users[$username] = $user;
 
-write_file('users.json', json_encode($users));
+$StorageMethod = json_decode(read_file("config.json"), true);
+if ($StorageMethod["Save_mode"] == "DB") {
+    $connection = MySqlDatabaseConnection::getInstance();
+    $pdo1 = $connection->getConnection('localhost', 'root', '', 'chatroom');
+
+    //add user as viewer to DB------------------------
+    $stmt6 = $pdo1->prepare("INSERT INTO Users (username,name, bio,password,email,permission,main_profile_image)
+    VALUES (?,?);");
+    $stmt6->execute([$username, $name, "BIO", $password, $email,$permission,""]);
+    $result_pdo2 = $stmt6->fetchAll();
+
+}else{
+
+    $user=[
+        'name' => $name,
+        'bio' => "BIO",
+        'username'=>$username,
+        'password'=>$password,
+        'email'=>$email,
+        'permission' => $permission,
+        'seen_messages'=>[],
+        'main_profile_image'=>[],
+        'other_profile_image'=>[],
+    ];
+    $users[$username] = $user;
+    write_file('users.json', json_encode($users));
+}
 setcookie("username", $username,["path"=>"/"]);
 
 // Foward to main chatroom page
