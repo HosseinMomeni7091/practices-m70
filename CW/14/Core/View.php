@@ -4,12 +4,17 @@ namespace app\Core;
 
 class View
 {
-    public $mainpath = __DIR__ . "/../view/";
+    public $mainpath ;
 
-    public function show($path, $data)
+    public function __construct(){
+        $this->mainpath=dirname(__DIR__)."\\view\\";
+    }
+
+    public function show($path, $data=[])
     {
         extract($data);
         $list = $data;
+
         require_once $this->mainpath . $path;
     }
 
@@ -28,7 +33,6 @@ class View
         }
 
         ob_end_clean(); //End of Output Buffer
-
         echo str_replace("{{Rasoul}}", $all_layout, $mainpage);
     }
 }
