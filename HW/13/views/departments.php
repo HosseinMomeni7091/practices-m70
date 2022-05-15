@@ -75,3 +75,11 @@
         </tbody>
     </table>
 </div>
+<div class="mx-4 my-4 p-2 backdrop-blur-md bg-amber-400/30 rounded-md w-1/2">
+    <p class="font-bold text-2xl text-left text-black">Create New department</p>
+    <form action="" method="post">
+        <label class="text-bold text-black text-xl " for="name">Department Name</label>
+        <input class="rounded-md px-2 py-2" type="text" name="name">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"> Create </button>
+    </form>
+</div>

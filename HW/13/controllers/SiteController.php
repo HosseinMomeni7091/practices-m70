@@ -31,9 +31,9 @@ class SiteController extends Controller
 
     public function home()
     {
-        // echo "home";
-        return $this->render('home', [
-            'name' => 'HosseinMomeni from site controller'
+        $this->setLayout('main');
+        return $this->render('primarylist', [
+            'name' => "manager"
         ]);
     }
     public function manager()
@@ -46,7 +46,7 @@ class SiteController extends Controller
     public function userconfirmation()
     {
         $this->setLayout('manager');
-        return $this->render('home', [
+        return $this->render('userconfirmation', [
             'name' => "manager"
         ]);
     }
@@ -57,13 +57,23 @@ class SiteController extends Controller
             'name' => "manager"
         ]);
     }
+    public function doctor()
+    {
+        $this->setLayout('doctor');
+        return $this->render('home', [
+            'name' => "doctor"
+        ]);
+    }
+    public function workingtimetabling()
+    {
+        $this->setLayout('doctor');
+        return $this->render('workingtimetabling', [
+            'name' => "doctor"
+        ]);
+    }
 
     public function login(Request $request)
     {
-
-        echo '<pre>';
-        var_dump($request->getBody(), $request->getRouteParam('id'));
-        echo '</pre>';
         $loginForm = new LoginForm();
         if ($request->getMethod() === 'post') {
             //filter data and asignment to related property
@@ -74,7 +84,7 @@ class SiteController extends Controller
                 return;
             }
         }
-        $this->setLayout('auth');
+        $this->setLayout('main');
         return $this->render('login', [
             'model' => $loginForm
         ]);
@@ -93,7 +103,7 @@ class SiteController extends Controller
             }
 
         }
-        $this->setLayout('auth');
+        $this->setLayout('main');
         return $this->render('register', [
             'model' => $registerModel
         ]);

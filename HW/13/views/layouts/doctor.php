@@ -13,7 +13,7 @@ use core\Application;
 </head>
 <!-- <body class="bg-gradient-to-r from-purple-500 to-pink-500 "> -->
 
-<body class="bg-fixed  bg-cover bg-center" style="background-image: url(/views/layouts/managerpic.jpg);">
+<body class="bg-fixed bg-cover bg-center" style="background-image: url(/views/layouts/doctorpic.jpg);">
 
   <nav class="backdrop-blur-md bg-blue-300/30 border-gray-200 px-4 sm:px-4 py-2.5 mx-4 my-4 rounded dark:bg-gray-800">
     <div class="container flex flex-wrap justify-between items-center mx-auto">
@@ -65,10 +65,7 @@ use core\Application;
             <a href="/" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Home</a>
           </li>
           <li>
-            <a href="/manager/userconfirmation" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">User Confirmation</a>
-          </li>
-          <li>
-            <a href="/manager/departments" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Departments</a>
+            <a href="/doctor/workingtimetabling" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Working Timetabling</a>
           </li>
           <li>
             <a href="" class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">About</a>

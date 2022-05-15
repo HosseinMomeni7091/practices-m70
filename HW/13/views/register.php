@@ -29,5 +29,5 @@ $form = new Form();
     <?php echo $form->field($model, 'email') ?>
     <?php echo $form->field($model, 'password')->passwordField() // change input type and then countiue as same as former?>
     <?php echo $form->field($model, 'passwordConfirm')->passwordField()// change input type and then countiue as same as former ?>
-    <button class="btn btn-success">Submit</button>
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Register</button>
 <?php Form::end() ?>

@@ -41,7 +41,7 @@ abstract class BaseField
         return sprintf('<div class="form-group">
                 <label>%s</label>
                 %s
-                <div class="invalid-feedback">
+                <div class="text-center" class="invalid-feedback">
                     %s
                 </div>
             </div>',

@@ -38,7 +38,7 @@ class Field extends BaseField
 
     public function renderInput()
     {
-        return sprintf('<input type="%s" class="form-control%s" name="%s" value="%s">',
+        return sprintf('<input type="%s" class="w-48 h-6 px-2 my-2 rounded-md border-black border-2" class="form-control%s" name="%s" value="%s">',
             $this->type,
             $this->model->hasError($this->attribute) ? ' is-invalid' : '',//add form class if there are not error 
             $this->attribute,//name of input

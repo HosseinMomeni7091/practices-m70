@@ -25,7 +25,7 @@ class Form
         foreach ($options as $key => $value) {
             $attributes[] = "$key=\"$value\"";
         }
-        echo sprintf('<form action="%s" method="%s" %s>', $action, $method, implode(" ", $attributes));
+        echo sprintf('<form class="shadow-md text-left w-1/2 m-auto bg-slate-100 rounded-md p-4" action="%s" method="%s" %s>', $action, $method, implode(" ", $attributes));
         return new Form();
     }
 
