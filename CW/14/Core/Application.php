@@ -2,9 +2,9 @@
 
 namespace app\Core;
 
+use app\Model\Users;
 use app\Core\db\Connection;
 use app\Core\db\MySqlDatabase;
-use app\Model\Users;
 
 class Application
 {
@@ -13,6 +13,8 @@ class Application
     private Request $request;
     private Response $response;
     private View $view;
+    private Auth $Auth;
+    private Cookie $cookie;
     private Model $user;
     private MySqlDatabase $db;
 
@@ -25,6 +27,8 @@ class Application
         $this->request = new Request();
         $this->response = new Response();
         $this->view = new View();
+        $this->Auth = new Auth();
+        $this->cookie = New Cookie();
         $this->db = new MySqlDatabase(Connection::getInstance());
         
 
@@ -39,6 +43,11 @@ class Application
 
     public function run()
     {
-        $this->router->resolve();
+
+        try {
+            $this->router->resolve();
+        } catch (\Exception $e ) {
+            //you dont have permission to access on this site
+        }
     }
 }

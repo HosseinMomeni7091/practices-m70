@@ -12,7 +12,7 @@ class View
 
     public function show($path, $data=[])
     {
-        extract($data);
+        // extract($data);
         $list = $data;
 
         require_once $this->mainpath . $path;

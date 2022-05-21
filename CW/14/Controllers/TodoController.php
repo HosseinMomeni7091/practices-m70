@@ -2,12 +2,17 @@
 
 namespace app\Controllers;
 
-use app\Core\Application;
-use app\Core\Model;
-use app\Core\Request;
+// require 'app\DB\Medoo.php';
+// use app\DB\Medoo\Medoo;
+
+
 use app\Core\View;
-use app\Model\Users;
+use app\Core\Model;
 use app\Model\Tasks;
+use app\Model\Users;
+use app\Core\Request;
+use app\Core\cookie;
+use app\Core\Application;
 
 class TodoController
 {
@@ -15,7 +20,113 @@ class TodoController
 
     public function index()
     {
-        echo "all todos";
+        echo "salam";
+        // $database = new Medoo([
+        //     // [required]
+        //     'type' => 'mysql',
+        //     'host' => 'localhost',
+        //     'database' => 'mvccw14',
+        //     'username' => 'root',
+        //     'password' => '',
+        // ]);
+
+        // $a=$database->select("tasks", "ID");
+        // echo '<pre>';
+        // print_r($a);
+        // echo '</pre>'.'<br>';
+    }
+
+
+    public function register_user()
+    {
+        // Get data
+        echo "salam <br>";
+        $data = Application::$app->getInstanceOfClasses("request")->getBody();
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>' . '<br>';
+
+        // Save data into DB
+        $user = Users::do();
+        $b = $user->create($data);
+        Application::$app->getInstanceOfClasses("response")->redirect("/login");
+    }
+
+    public function show_login_page()
+    {
+        Application::$app->getInstanceOfClasses("view")->show("login.php");
+    }
+
+    public function login()
+    {
+        echo "Welcom to Login page";
+
+        // Check with DB
+        $data = Application::$app->getInstanceOfClasses("request")->getBody();
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>' . '<br>';
+
+        $name = $data["name"];
+        $password = $data["password"];
+
+        $result = Application::$app->getInstanceOfClasses("Auth")->login($name, $password);
+        var_dump($result);
+
+        if ($result == false) {
+            echo "something(s) is(are) wrong!";
+            Application::$app->getInstanceOfClasses("response")->redirect("/");
+        }
+        if ($result != false) {
+            
+            echo "welcome   " . $result["name"] . "   " . $result["lastname"] . "   :)";
+            
+            Application::$app->getInstanceOfClasses("response")->redirect("/profile");
+        }
+    }
+    
+    public function profile()
+    {
+        
+        $result = Application::$app->getInstanceOfClasses("Auth")->user();
+        
+        
+    }
+
+
+
+
+
+
+    public function alltasks()
+    {
+        // save data to DB and redirect to final page
+        $Tasks = Tasks::do();
+        $data = Application::$app->getInstanceOfClasses("request")->getBody();
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>' . '<br>';
+        $b = $Tasks->create($data);
+
+        Application::$app->getInstanceOfClasses("response")->redirect("/showalltasks");
+    }
+    public function showalltasks()
+    {
+        echo "Welcome to all Tasks";
+        // load data from DB to Array
+        $Tasks = Tasks::do();
+        $data = $Tasks->all();
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>' . '<br>';
+
+
+        // Pass into $data (befor render of final page)
+        Application::$app->getInstanceOfClasses("view")->show("all.php", $data);
+
+
+
+        // render final page
     }
 
     public function show()

@@ -26,11 +26,17 @@ abstract class Model
     {
         return $this->db->select()->fetchAll();
     }
+
+
+
     // return the record
     public function find(string $value, string $col = 'id')
     {
         return  $this->db->select()->where($col, $value)->fetchAll();
     }
+
+
+    
     // make a new recorde 
     public function create(array $data)
     {

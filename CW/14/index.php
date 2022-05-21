@@ -25,6 +25,18 @@ $app->getInstanceOfClasses('router')->get('/final',[TodoController::class,"final
 
 $app->getInstanceOfClasses('router')->get('/user',[TodoController::class,"userinfo"]);
 
+$app->getInstanceOfClasses('router')->get('/register_user',[TodoController::class,"register_user"]);
+$app->getInstanceOfClasses('router')->post('/register_user',[TodoController::class,"register_user"]);
+
+$app->getInstanceOfClasses('router')->get('/login',[TodoController::class,"show_login_page"]);
+$app->getInstanceOfClasses('router')->post('/login',[TodoController::class,"login"]);
+
+$app->getInstanceOfClasses('router')->get('/profile',[TodoController::class,"profile"]);
+
+$app->getInstanceOfClasses('router')->post('/alltasks',[TodoController::class,"alltasks"]);
+$app->getInstanceOfClasses('router')->get('/showalltasks',[TodoController::class,"showalltasks"]);
+$app->getInstanceOfClasses('router')->post('/showalltasks',[TodoController::class,"showalltasks"]);
+
 $app->getInstanceOfClasses('router')->get('/',[TodoController::class,"pashe"]);
 
 
