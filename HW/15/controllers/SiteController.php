@@ -265,6 +265,128 @@ class SiteController extends Controller
             'allreserve' => $all
         ]);
     }
+    public function doctorreserve()
+    {
+        $sess = Application::$app->session->get('ID');
+
+        $profile = Reservation::do();
+        $tableName1 = $profile::tableName();
+
+        $users = User::do();
+        $tableName = $users::tableName();
+
+        $all = $profile->join(["*"], $tableName, $tableName1, "Right", "ID", "patient_id", "$tableName1.doctor_id", $sess);
+        // echo '<pre>all reservation';
+        // print_r($all);
+        // echo '</pre>' . '<br>';
+
+        // exit;
+
+        $this->setLayout('Doctor');
+        return $this->render('listreserveD', [
+            'allreserve' => $all
+        ]);
+    }
+
+    public function timing()
+    {
+        $ID = Application::$app->request->getBody();
+        $sess = Application::$app->session->get('ID');
+
+        $workingtime = Workingtimetabling::do();
+        $tableName2 = $workingtime::tableName();
+
+        $users = User::do();
+        $tableName = $users::tableName();
+
+        $timelist = $users->join(["*"], $tableName, $tableName2, "LEFT", "ID", "user_id", "$tableName.ID", $sess);
+
+        // default list--------------
+        $final = [
+            "Saturday" => [],
+            "Sunday" => [],
+            "Monday" => [],
+            "Tuesday" => [],
+            "Wednesday" => [],
+            "Thursday" => [],
+            "Friday" => []
+        ];
+        foreach ($final as $key => $value) {
+            $final[$key] = [
+                "8-9" => 0,
+                "9-10" => 0,
+                "10-11" => 0,
+                "11-12" => 0,
+                "12-13" => 0,
+                "13-14" => 0,
+                "14-15" => 0,
+                "15-16" => 0,
+                "16-17" => 0,
+                "17-18" => 0,
+            ];
+        }
+
+
+        // update table according to doctor timesheet
+        // echo $timelist[0]["sat_start"] . "<br>";
+        // echo $timelist[0]["sat_end"] . "<br>";
+        for ($i = $timelist[0]["sat_start"]; $i < $timelist[0]["sat_end"]; $i++) {
+            $two = $i + 1;
+            $keyy = "$i" . "-" . "$two";
+            $final["Saturday"][$keyy] = 1;
+        }
+        // echo $timelist[0]["sun_start"] . "<br>";
+        // echo $timelist[0]["sun_end"] . "<br>";
+        for ($i = $timelist[0]["sun_start"]; $i < $timelist[0]["sun_end"]; $i++) {
+            $two = $i + 1;
+            $keyy = "$i" . "-" . "$two";
+            $final["Sunday"][$keyy] = 1;
+        }
+        // echo $timelist[0]["mon_start"] . "<br>";
+        // echo $timelist[0]["mon_end"] . "<br>";
+        for ($i = $timelist[0]["mon_start"]; $i < $timelist[0]["mon_end"]; $i++) {
+            $two = $i + 1;
+            $keyy = "$i" . "-" . "$two";
+            $final["Monday"][$keyy] = 1;
+        }
+        // echo $timelist[0]["tues_start"] . "<br>";
+        // echo $timelist[0]["tues_end"] . "<br>";
+        for ($i = $timelist[0]["tues_start"]; $i < $timelist[0]["tues_end"]; $i++) {
+            $two = $i + 1;
+            $keyy = "$i" . "-" . "$two";
+            $final["Tuesday"][$keyy] = 1;
+        }
+        // echo $timelist[0]["wendes_start"] . "<br>";
+        // echo $timelist[0]["wendes_end"] . "<br>";
+        for ($i = $timelist[0]["wendes_start"]; $i < $timelist[0]["wendes_end"]; $i++) {
+            $two = $i + 1;
+            $keyy = "$i" . "-" . "$two";
+            $final["Wednesday"][$keyy] = 1;
+        }
+        // echo $timelist[0]["thurs_start"] . "<br>";
+        // echo $timelist[0]["thurs_end"] . "<br>";
+        for ($i = $timelist[0]["thurs_start"]; $i < $timelist[0]["thurs_end"]; $i++) {
+            $two = $i + 1;
+            $keyy = "$i" . "-" . "$two";
+            $final["Thursday"][$keyy] = 1;
+        }
+        // echo $timelist[0]["fri_start"] . "<br>";
+        // echo $timelist[0]["fri_end"] . "<br>";
+        for ($i = $timelist[0]["fri_start"]; $i < $timelist[0]["fri_end"]; $i++) {
+            $two = $i + 1;
+            $keyy = "$i" . "-" . "$two";
+            $final["Friday"][$keyy] = 1;
+        }
+        // final result up to now
+        // echo '<pre> ghable reserve ::::';
+        // print_r($final);
+        // echo '</pre>' . '<br>';
+
+        $this->setLayout('Doctor');
+        return $this->render('detailD', [
+            'time' => $final
+        ]);
+    }
 
     public function filter()
     {

@@ -51,6 +51,13 @@ $app->router->post('reserve', [SiteController::class, 'reserve']);
 $app->router->get('reservationlist', [SiteController::class, 'reservationlist']);
 $app->router->post('reservationlist', [SiteController::class, 'reservationlist']);
 
+
+$app->router->get('doctor/reservation', [SiteController::class, 'doctorreserve']);
+$app->router->post('doctor/reservation', [SiteController::class, 'doctorreserve']);
+
+$app->router->get('doctor/timing', [SiteController::class, 'timing']);
+$app->router->post('doctor/timing', [SiteController::class, 'timing']);
+
 $app->router->get('patient/timesofdoctors', [SiteController::class, 'timesofdoctors']);
 $app->router->post('patient/timesofdoctors', [SiteController::class, 'timesofdoctors']);
 
