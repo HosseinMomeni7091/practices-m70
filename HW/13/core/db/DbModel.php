@@ -27,7 +27,7 @@ abstract class DbModel extends Model
 
     public function save()
     {
-        $tableName = $this->tableName();//tablename::user/loginform
+        $tableName = $this->tableName();//tablename::user/loginform/profile
 
         // its very exited if it return all properties
         $attributes = $this->attributes();//name of properties of users/loginform/...

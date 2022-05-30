@@ -44,20 +44,7 @@ class SiteController extends Controller
         // Application::$app->db->table($tableName);
 
 
-        // echo '<pre>';
-        // print_r($user);
-        // echo '</pre>' . '<br>';
-
-
-        // $join = $profile->join(["*"],$tableName,$tableName1,"LEFT","ID","user_id","$tableName1.working_field","pharmacist");
-        // $join = $profile->join(["*"],$tableName,$tableName1,"LEFT","ID","user_id","$tableName.name","c");
         $list = $profile->join(["*"], $tableName, $tableName1, "INNER", "ID", "user_id");
-        // echo '<pre>';
-        // print_r($list);
-        // echo '</pre>' . '<br>';
-        // echo '<pre>';
-        // print_r($join[0]["user_id"]);
-        // echo '</pre>'.'<br>';
 
 
         // exit;
@@ -65,10 +52,17 @@ class SiteController extends Controller
 
 
         $this->setLayout('main');
-        return $this->render('primarylist', [
-            'list' => $list,
-            'fields' => $fields
-        ]);
+        // if (Application::isGuest()){
+            return $this->render('primarylist', [
+                'list' => $list,
+                'fields' => $fields
+            ]);
+        // }else{
+        //     return $this->render('primarylist', [
+        //         'list' => $list,
+        //         'fields' => $fields
+        //     ]);
+        // }
     }
 
     public function detail()

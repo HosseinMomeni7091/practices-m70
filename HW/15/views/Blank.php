@@ -1,0 +1,1 @@
+<h1 class="ml-4 font-extrabold">Welcome to Our Medical Center</h1>
