@@ -58,21 +58,22 @@ class Request
             }
         }
         if (isset($_FILES["image"]["name"])){
-            // echo "file";
-            // && $_FILES["image"]["name"]!=""
-            // $fakename = str_random(5);
+     
             $imgname=$_FILES["image"]["name"];
-            preg_match_all("/\.\w+$/",$_FILES["image"]["name"],$all);
-            $exten=$all[0][0];
+            // preg_match_all("/\.\w+$/",$_FILES["image"]["name"],$all);
+            // $exten=$all[0][0];
             $temp=$_FILES["image"]["tmp_name"];
-            echo __DIR__;
+            // echo __DIR__;
             $target_file = __DIR__."/storage/".$imgname;
-            echo $target_file;
+            // echo $target_file;
             move_uploaded_file($temp, $target_file);
             $data["image"]=$target_file;
         }
         $sess = (int) Application::$app->session->get('ID');
         $data["user_id"]=$sess; 
+
+
+
         return $data;
     }
 
