@@ -13,9 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/cw17', function () {
     return view('welcome');
 });
+Route::get('/home', function () {
+    return view('welcome');
+});
+
 
 Route::get('/{title}/{id}/{cat}', function ($title, $id, $cat) {
 
