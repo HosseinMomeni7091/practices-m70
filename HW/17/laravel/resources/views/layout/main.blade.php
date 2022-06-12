@@ -18,7 +18,7 @@
         </div>
         <div class="flex inline-flex font-bold text-xl">
             <div class="px-4 ">
-                <a href="">New Reservation</a>
+                <a href="../../../../../">New Reservation</a>
             </div>
             <div class="px-2">
                 <a href="">Tracking Reservation</a>

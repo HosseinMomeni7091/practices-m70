@@ -239,29 +239,105 @@ class usercontroller extends Controller
         // print_r($result[0]->$att);
         // echo '</pre>' . '<br>';
         // dd($result[0]);
-
+        
 
         foreach ($attributes as $key => $value) {
+            $a=(DB::table('timetables')
+                ->select($value)
+                ->where('day', session('day'))
+                ->get());
+            $a=($a->toArray())[0]->$value;
+            $a=$a+1;
+
             DB::table('timetables')
                 ->where('day', session('day'))
-                ->update([$value => DB::raw("+ 1")]);
+                ->update([$value => $a]);
         }
         // exit;
         // Redirect to final Page
-        $code=session("code");
-        $day=session("day");
-        $time=session("time");
-        $service=$serviceMap[session("service")];
-        $cost=$costMap[session('service')];
-        
+        $code = session("code");
+        $day = session("day");
+        $time = session("time");
+        $service = $serviceMap[session("service")];
+        $cost = $costMap[session('service')];
 
-        return view('confirmation', compact("cost","day","time","service","code"));
+
+        return view('confirmation', compact("cost", "day", "time", "service", "code"));
     }
 
-    public function cancel(Request $request) {
-        $code=$request->all("cancelcode")["cancelcode"];
-        
-    
-    
+    public function cancel(Request $request)
+    {
+        $code = $request->all("cancelcode")["cancelcode"];
+        $time = (DB::table('reservations')
+            ->select("time")
+            ->where('code', $code)
+            ->get())[0]->time;
+
+        $alltime=explode("--",$time);
+        $start=explode(":",$alltime[0]);
+        $end=explode(":",$alltime[1]);
+
+        $day = (DB::table('reservations')
+            ->select("day")
+            ->where('code', $code)
+            ->get())[0]->day;
+
+        // delete from reservation
+        $time = DB::table('reservations')
+            ->where('code', $code)
+            ->delete();
+
+
+        // delete from timetable
+        $timearray=[$start[0],$start[1],$end[0],$end[1]];
+
+        $attributes = [];
+
+        // prepare attribute for reservation
+        // START AND END OF ATTRIBUTE
+        if (($timearray[1] / 5) == 12) {
+            $startAtt = ($timearray[0] + 1) . "0";
+        } else {
+            $startAtt = $timearray[0] . (($timearray[1] / 5) + 1);
+        }
+        $endAtt = $timearray[2] . ($timearray[3] / 5);
+
+
+        // fill array for reservation
+        if ($timearray[0] == $timearray[2]) {
+            for ($i = $startAtt; $i < $endAtt + 1; $i++) {
+                $attributes[] = $i;
+            }
+        } else {
+            if (($timearray[1] / 5) == 12) {
+                $attributes[] = $timearray[0] . ($timearray[1] / 5);
+                for ($i = 1; $i < ($timearray[3] / 5) + 1; $i++) {
+                    $attributes[] = $timearray[2] . $i;
+                }
+            } else {
+                for ($i = ($timearray[1] / 5) + 1; $i < 13; $i++) {
+                    $attributes[] = $timearray[0] . $i;
+                }
+                for ($i = 1; $i < ($timearray[3] / 5) + 1; $i++) {
+                    $attributes[] = $timearray[2] . $i;
+                }
+            }
+        }
+        // exit;
+
+       foreach ($attributes as $key => $value) {
+            $a=(DB::table('timetables')
+                ->select($value)
+                ->where('day', $day)
+                ->get());
+            $a=($a->toArray())[0]->$value;
+            $a=$a-1;
+
+            DB::table('timetables')
+                ->where('day', $day)
+                ->update([$value => $a]);
+        }
+        return view('cancel');
+
     }
 }
