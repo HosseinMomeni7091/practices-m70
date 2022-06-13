@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\DB;
 
 class usercontroller extends Controller
 {
+
+    public function home(Request $request)
+    {
+        $request->session()->forget(['name', 'phone', 'day', 'service', 'track', 'time', 'code']);
+        return view('reservation');
+    }
     public function type(Request $request)
     {
         // dd($request->all());
@@ -32,15 +38,112 @@ class usercontroller extends Controller
     public function automaticReserve(Request $request)
     {
         // prepare data from DB
+        $service = $request->session()->get("service");
+        $days = [
+            0 => "Saturday",
+            1 => "Sunday",
+            2 => "Monday",
+            3 => "Tuesday",
+            4 => "Wednesday",
+            5 => "Thursday",
+            6 => "Friday"
+        ];
+        $map1 = [
+            "Saturday" => "0",
+            "Sunday" => "1",
+            "Monday" => "2",
+            "Tuesday" => "3",
+            "Wednesday" => "4",
+            "Thursday" => "5",
+            "Friday" => "6"
+        ];
+        $map2 = [
+            "Basic" => 12,
+            "Internal" => 4,
+            "External" => 3,
+        ];
 
+        $all = Timetable::all()->toArray();
+        $final = [];
 
-        // prepare for sending data
-        $Day = "Monday";
-        $Time = "9-9:20";
+        foreach ($days as $key => $day) {
+            $alltime = $all[$map1[$day]];
+            unset($alltime['id']);
+            unset($alltime['day']);
+            for ($i = 0; $i < 144; $i++) {
+                $result = 1;
+                for ($j = 0; $j < $map2[$service]; $j++) {
+                    if (($alltime[$i + $j] ?? 2) == 2) {
+                        $result = $result * 0;
+                    }
+                }
+                if ($result == 1) {
+                    // Cal start time
+                    $hr1 = floor($i / 12) + 9;
+                    $mn1 = (($i - floor($i / 12) * 12)) * 5;
+                    $strt = $hr1 . ":" . $mn1;
+                    if ($mn1 == 60) {
+                        $mn1 = 0;
+                        $hr1 = ($hr1 + 1);
+                    }
 
-        // pass data into related view
+                    // Cal End time
+                    $hr2 = floor(($i + $map2[$service]) / 12) + 9;
+                    $mn2 = ((($i + $map2[$service]) - floor(($i + $map2[$service]) / 12) * 12)) * 5;
+                    $end = $hr2 . ":" . $mn2;
+                    if ($mn2 == 60) {
+                        $mn2 = 0;
+                        $hr2 = ($hr2 + 1);
+                    }
+                    $final[] = ["start" => [$hr1, $mn1], "end" => [$hr2, $mn2]];
+                }
+            }
+            if (count($final)) {
+                $finaltime = $final[0];
+                $finalday = $day;
+            }
+            if ($finaltime) {
+                break;
+            }
+        }
 
+        // session --------------------
+        $interf = $finaltime["start"][0] . "." . $finaltime["start"][1] . "." . $finaltime["end"][0] . "." . $finaltime["end"][1];
+        session(['pretime' => $interf]);
+        session(['day' => "$finalday"]);
+        $Day = session("day");
+        $Time = session("pretime");
+
+        // redirect data into related view
         return view('reservation21', compact("Day", "Time"));
+
+    }
+
+    public function autotoConfirmation(Request $request)
+    {
+
+        // Maping for fill tables
+        $serviceMap = [
+            "Basic" => "Basic CarWash",
+            "Internal" => "External CarWash",
+            "External" => "Internal CarWash"
+        ];
+        $costMap = [
+            "Basic" => "80000",
+            "Internal" => "30000",
+            "External" => "20000",
+        ];
+
+        // Redirect to final Page
+        $code = Str::random(8);
+        session(['code' => "$code"]);
+        $day = session("day");
+        $time = session("time");
+        $service = $serviceMap[session("service")];
+        $cost = $costMap[session('service')];
+
+        $request->session()->forget('track');
+        return view('confirmation', compact("cost", "day", "time", "service", "code"));
     }
 
     public function manualReserve(Request $request)
@@ -91,6 +194,9 @@ class usercontroller extends Controller
         unset($alltime['id']);
         unset($alltime['day']);
         // echo '<pre>';
+        // print_r($request->session()->all());
+        // echo '</pre>'.'<br>';
+        // echo '<pre>';
         // print_r($alltime);
         // echo '</pre>'.'<br>';
 
@@ -102,8 +208,10 @@ class usercontroller extends Controller
             for ($j = 0; $j < $map2[$service]; $j++) {
                 if (($alltime[$i + $j] ?? 2) == 2) {
                     $result = $result * 0;
+                    // echo "i+j =  ".$alltime[$i + $j]. "</br>";
                 }
                 // echo "j:" . $j . "</br>";
+                // echo "i+j =  ".$alltime[$i + $j]. "</br>";
             }
             // echo "result:" . $result . "</br>";
             // echo "<hr>";
@@ -143,14 +251,20 @@ class usercontroller extends Controller
 
         return view('reservation221', compact("final"));
     }
+
+
     public function confirmedTime(Request $request)
     {
         $timearray = explode(".", $request->all("timeduratoin")["timeduratoin"]);
 
-        $attributes = [];
+        if (session("pretime")) {
+            $timearray = explode(".", session("pretime"));
+        }
 
         // prepare attribute for reservation
         // START AND END OF ATTRIBUTE
+        $attributes = [];
+
         if (($timearray[1] / 5) == 12) {
             $startAtt = ($timearray[0] + 1) . "0";
         } else {
@@ -197,57 +311,59 @@ class usercontroller extends Controller
         ];
 
 
-        // Fill Time Table
+        // Fill user and reserve table 
 
         $reserve = new Reservation();
         $user = new User;
         //.....................................................
-        $user->name = session('name');
-        $user->phone = session('phone');
-        $user->save();
 
-        $currentUserId = (User::where('phone', session('phone'))->get()->toArray())[0]["id"];
+        // check user in DB
+        $a = (DB::table('users')
+            ->select("id")
+            ->where('phone', session('phone'))
+            ->get()
+            ->toArray());
+
+        if ($a) {
+            $currentUserId = ($a)[0]->id;
+        }
+
+        if (!$a) {
+            $user->name = session('name');
+            $user->phone = session('phone');
+            $user->save();
+            $a = (DB::table('users')
+                ->select("id")
+                ->where('phone', session('phone'))
+                ->get()
+                ->toArray());
+            $currentUserId = ($a)[0]->id;
+        }
+
+        // $currentUserId = (User::where('phone', session('phone'))->get()->toArray())[0]["id"];
         // dd($currentUserId);
 
+        if (!session("track")) {
+            // fill reserve table/model
+            $reserve->user_id = $currentUserId;
+            $reserve->day = session('day');
+            $reserve->service = session('service');
+            $reserve->time = session('time');
+            $reserve->cost = $costMap[session('service')];
+            $code = Str::random(8);
+            session(['code' => "$code"]);
+            $reserve->code = session("code");
+            $reserve->save();
+        }
 
-        $reserve->user_id = $currentUserId;
-        $reserve->day = session('day');
-        $reserve->service = session('service');
-        $reserve->time = session('time');
-        $reserve->cost = $costMap[session('service')];
-        $code = Str::random(8);
-        session(['code' => "$code"]);
-        $reserve->code = $code;
-        $reserve->save();
-
-
-        // Fill Reservation Table
-
-        // $totaltimetable = new Timetable();
-        // $temp=(Timetable::where('day',session('day'))->get()->toArray())[0];
-        // dd($temp);
-
-        // $result = DB::table('timetables')
-        //     ->select("91")
-        //     ->where('day', session('day'))
-        //     ->get()->toArray();
-        // echo '<pre>';
-        // print_r($result);
-        // echo '</pre>' . '<br>';
-        // $att = 91;
-        // echo '<pre>';
-        // print_r($result[0]->$att);
-        // echo '</pre>' . '<br>';
-        // dd($result[0]);
-        
-
+        // save data into DB (increase data by one )
         foreach ($attributes as $key => $value) {
-            $a=(DB::table('timetables')
+            $a = (DB::table('timetables')
                 ->select($value)
                 ->where('day', session('day'))
                 ->get());
-            $a=($a->toArray())[0]->$value;
-            $a=$a+1;
+            $a = ($a->toArray())[0]->$value;
+            $a = $a + 1;
 
             DB::table('timetables')
                 ->where('day', session('day'))
@@ -261,7 +377,8 @@ class usercontroller extends Controller
         $service = $serviceMap[session("service")];
         $cost = $costMap[session('service')];
 
-
+        $request->session()->forget('track');
+        $request->session()->forget('pretime');
         return view('confirmation', compact("cost", "day", "time", "service", "code"));
     }
 
@@ -273,9 +390,9 @@ class usercontroller extends Controller
             ->where('code', $code)
             ->get())[0]->time;
 
-        $alltime=explode("--",$time);
-        $start=explode(":",$alltime[0]);
-        $end=explode(":",$alltime[1]);
+        $alltime = explode("--", $time);
+        $start = explode(":", $alltime[0]);
+        $end = explode(":", $alltime[1]);
 
         $day = (DB::table('reservations')
             ->select("day")
@@ -289,7 +406,7 @@ class usercontroller extends Controller
 
 
         // delete from timetable
-        $timearray=[$start[0],$start[1],$end[0],$end[1]];
+        $timearray = [$start[0], $start[1], $end[0], $end[1]];
 
         $attributes = [];
 
@@ -325,19 +442,69 @@ class usercontroller extends Controller
         }
         // exit;
 
-       foreach ($attributes as $key => $value) {
-            $a=(DB::table('timetables')
+        foreach ($attributes as $key => $value) {
+            $a = (DB::table('timetables')
                 ->select($value)
                 ->where('day', $day)
                 ->get());
-            $a=($a->toArray())[0]->$value;
-            $a=$a-1;
+            $a = ($a->toArray())[0]->$value;
+            $a = $a - 1;
 
             DB::table('timetables')
                 ->where('day', $day)
                 ->update([$value => $a]);
         }
-        return view('cancel');
+        $request->session()->forget(['name', 'phone', 'day', 'service', 'track', 'time', 'code']);
 
+        return view('cancel');
+    }
+    public function searchtracknumber(Request $request)
+    {
+        $request->session()->forget(['name', 'phone', 'day', 'service', 'track', 'time', 'code']);
+
+        $phone = $request->all("phone")["phone"];
+        $track = $request->all("track")["track"];
+        $Totaltable = DB::table('users')
+            ->join('reservations', 'users.id', '=', 'reservations.user_id')
+            ->select('users.*', 'reservations.*')
+            ->where('phone', '=', $phone)
+            ->where('reservations.code', '=', $track)
+            ->get()
+            ->toArray();
+
+        if ($Totaltable) {
+
+            // set session
+            // Maping for fill tables
+            $serviceMap = [
+                "Basic" => "Basic CarWash",
+                "Internal" => "External CarWash",
+                "External" => "Internal CarWash"
+            ];
+            $costMap = [
+                "Basic" => "80000",
+                "Internal" => "30000",
+                "External" => "20000",
+            ];
+            session(['time' => $Totaltable[0]->time]);
+            session(['code' => $Totaltable[0]->code]);
+            session(['day' => $Totaltable[0]->day]);
+            session(['service' => $Totaltable[0]->service]);
+            session(['track' => 'true']);
+
+            $code = session("code");
+            $day = session("day");
+            $time = session("time");
+            $service = $serviceMap[session("service")];
+            $cost = $costMap[session('service')];
+
+
+            // send to confirmation
+            return view('confirmation', compact("cost", "day", "time", "service", "code"));
+        } else {
+
+            // redirect to new view
+            return view('wrongpass');
+        }
     }
 }

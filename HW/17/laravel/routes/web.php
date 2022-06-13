@@ -14,8 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('reservation');
+Route::get('/', [usercontroller::class,"home"]);
+
+Route::get('/track', function () {
+    return view('track');
+});
+Route::post('/track', function () {
+    return view('track');
 });
 
 // Route::get('/', function () {
@@ -25,8 +30,14 @@ Route::post('/reservation2', [usercontroller::class,"type"]);
 
 Route::get('/reservation2/Automatic', [usercontroller::class,"automaticReserve"])->name("AutomaticReservation");
 
+// Route::get('/reservation2/Automatic/autotoConfirmation', [usercontroller::class,"autotoConfirmation"])->name("autotoConfirmation");
+
 Route::get('/reservation2/Manual', [usercontroller::class,"manualReserve"])->name("ManualReservation");
 
 Route::post('/reservation2/Manual/pre_proccess', [usercontroller::class,"preProccess"])->name("pre_proccess");
 Route::post('/reservation2/Manual/pre_proccess/confirmed', [usercontroller::class,"confirmedTime"])->name("confirmedTime");
+Route::get('/reservation2/Auto/pre_proccess/confirmed', [usercontroller::class,"confirmedTime"])->name("confirmedTime");
+Route::get('/reservation2/Manual/pre_proccess/confirmed', [usercontroller::class,"confirmedTime"])->name("confirmedTime");
+
 Route::post('/cancel', [usercontroller::class,"cancel"]);
+Route::post('/searchtracknumber', [usercontroller::class,"searchtracknumber"]);

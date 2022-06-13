@@ -21,7 +21,7 @@ class ReservationSeeder extends Seeder
                     "user_id"=>1,
                     "day"=> "saturday",
                     "service"=>"External",
-                    "time"=>"9:30 - 9:45",
+                    "time"=>"9:30--9:45",
                     "cost"=>"25000",
                     "code"=>"aaaaaaaa"
                 ],
@@ -29,7 +29,7 @@ class ReservationSeeder extends Seeder
                     "user_id"=>2,
                     "day"=> "saturday",
                     "service"=>"Internal",
-                    "time"=>"9:30 - 9:50",
+                    "time"=>"9:30--9:50",
                     "cost"=>"30000",
                     "code"=>"bbbbbbbb"
                 ],
@@ -37,7 +37,7 @@ class ReservationSeeder extends Seeder
                     "user_id"=>3,
                     "day"=> "saturday",
                     "service"=>"Basic",
-                    "time"=>"10:30 - 11:30",
+                    "time"=>"10:30--11:30",
                     "cost"=>"80000",
                     "code"=>"cccccccc"
                 ],
@@ -45,7 +45,7 @@ class ReservationSeeder extends Seeder
                     "user_id"=>1,
                     "day"=> "tuesday",
                     "service"=>"Basic",
-                    "time"=>"10:30 - 11:30",
+                    "time"=>"10:30--11:30",
                     "cost"=>"80000",
                     "code"=>"dddddddd"
                 ]

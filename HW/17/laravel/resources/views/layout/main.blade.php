@@ -21,7 +21,7 @@
                 <a href="../../../../../">New Reservation</a>
             </div>
             <div class="px-2">
-                <a href="">Tracking Reservation</a>
+                <a href="../../../../../track">Tracking Reservation</a>
             </div>
         </div>
     </nav>
