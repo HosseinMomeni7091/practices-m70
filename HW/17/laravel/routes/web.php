@@ -39,5 +39,6 @@ Route::post('/reservation2/Manual/pre_proccess/confirmed', [usercontroller::clas
 Route::get('/reservation2/Auto/pre_proccess/confirmed', [usercontroller::class,"confirmedTime"])->name("confirmedTime");
 Route::get('/reservation2/Manual/pre_proccess/confirmed', [usercontroller::class,"confirmedTime"])->name("confirmedTime");
 
-Route::post('/cancel', [usercontroller::class,"cancel"]);
 Route::post('/searchtracknumber', [usercontroller::class,"searchtracknumber"]);
+Route::post('/cancel', [usercontroller::class,"cancel"]);
+Route::post('/edite', [usercontroller::class,"edite"]);

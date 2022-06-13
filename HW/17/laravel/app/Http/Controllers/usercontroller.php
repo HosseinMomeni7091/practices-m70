@@ -14,7 +14,7 @@ class usercontroller extends Controller
 
     public function home(Request $request)
     {
-        $request->session()->forget(['name', 'phone', 'day', 'service', 'track', 'time', 'code']);
+        $request->session()->forget(['name', 'phone', 'day', 'service', 'track', 'time', 'code', "edite", "pretime"]);
         return view('reservation');
     }
     public function type(Request $request)
@@ -116,7 +116,6 @@ class usercontroller extends Controller
 
         // redirect data into related view
         return view('reservation21', compact("Day", "Time"));
-
     }
 
     public function autotoConfirmation(Request $request)
@@ -257,7 +256,7 @@ class usercontroller extends Controller
     {
         $timearray = explode(".", $request->all("timeduratoin")["timeduratoin"]);
 
-        if (session("pretime")) {
+        if ($request->session()->has('pretime')) {
             $timearray = explode(".", session("pretime"));
         }
 
@@ -297,6 +296,7 @@ class usercontroller extends Controller
         // Fill Session
         $preparedTime = $timearray[0] . ":" . $timearray[1] . "--" . $timearray[2] . ":" . $timearray[3];
         session(['time' => "$preparedTime"]);
+     
 
         // Maping for fill tables
         $serviceMap = [
@@ -340,8 +340,9 @@ class usercontroller extends Controller
             $currentUserId = ($a)[0]->id;
         }
 
-        // $currentUserId = (User::where('phone', session('phone'))->get()->toArray())[0]["id"];
-        // dd($currentUserId);
+        echo '<pre>';
+        var_dump(session("track"));
+        echo '</pre>'.'<br>';
 
         if (!session("track")) {
             // fill reserve table/model
@@ -369,16 +370,90 @@ class usercontroller extends Controller
                 ->where('day', session('day'))
                 ->update([$value => $a]);
         }
-        // exit;
-        // Redirect to final Page
-        $code = session("code");
-        $day = session("day");
-        $time = session("time");
-        $service = $serviceMap[session("service")];
-        $cost = $costMap[session('service')];
+       
 
-        $request->session()->forget('track');
-        $request->session()->forget('pretime');
+        if ($request->session()->has('edite')) {
+            $code = session("edite");
+
+            // get data from DB reservation
+            $time = (DB::table('reservations')
+                ->select("time")
+                ->where('code', $code)
+                ->get())[0]->time;
+
+
+            $alltime = explode("--", $time);
+            $start = explode(":", $alltime[0]);
+            $end = explode(":", $alltime[1]);
+
+            $day = (DB::table('reservations')
+                ->select("day")
+                ->where('code', $code)
+                ->get())[0]->day;
+
+            // delete from reservation
+            $time = DB::table('reservations')
+                ->where('code', $code)
+                ->delete();
+
+
+            // delete from timetable
+            $timearray = [$start[0], $start[1], $end[0], $end[1]];
+
+            $attributes = [];
+
+            // prepare attribute for reservation
+            // START AND END OF ATTRIBUTE
+            if (($timearray[1] / 5) == 12) {
+                $startAtt = ($timearray[0] + 1) . "0";
+            } else {
+                $startAtt = $timearray[0] . (($timearray[1] / 5) + 1);
+            }
+            $endAtt = $timearray[2] . ($timearray[3] / 5);
+
+
+            // fill array for reservation
+            if ($timearray[0] == $timearray[2]) {
+                for ($i = $startAtt; $i < $endAtt + 1; $i++) {
+                    $attributes[] = $i;
+                }
+            } else {
+                if (($timearray[1] / 5) == 12) {
+                    $attributes[] = $timearray[0] . ($timearray[1] / 5);
+                    for ($i = 1; $i < ($timearray[3] / 5) + 1; $i++) {
+                        $attributes[] = $timearray[2] . $i;
+                    }
+                } else {
+                    for ($i = ($timearray[1] / 5) + 1; $i < 13; $i++) {
+                        $attributes[] = $timearray[0] . $i;
+                    }
+                    for ($i = 1; $i < ($timearray[3] / 5) + 1; $i++) {
+                        $attributes[] = $timearray[2] . $i;
+                    }
+                }
+            }
+            foreach ($attributes as $key => $value) {
+                $a = (DB::table('timetables')
+                    ->select($value)
+                    ->where('day', $day)
+                    ->get());
+                $a = ($a->toArray())[0]->$value;
+                $a = $a - 1;
+                DB::table('timetables')
+                    ->where('day', $day)
+                    ->update([$value => $a]);
+            }
+        }
+        
+     
+         // Redirect to final Page
+         $code = session("code");
+         $day = session("day");
+         $time = session("time");
+         $service = $serviceMap[session("service")];
+         $cost = $costMap[session('service')];
+        $request->session()->forget(['track', "edite", "pretime"]);
+
         return view('confirmation', compact("cost", "day", "time", "service", "code"));
     }
 
@@ -454,13 +529,13 @@ class usercontroller extends Controller
                 ->where('day', $day)
                 ->update([$value => $a]);
         }
-        $request->session()->forget(['name', 'phone', 'day', 'service', 'track', 'time', 'code']);
-
+        $request->session()->forget(['name', 'phone', 'day', 'service', 'track', 'time', 'code', "edite","pretime"]);
+        
         return view('cancel');
     }
     public function searchtracknumber(Request $request)
     {
-        $request->session()->forget(['name', 'phone', 'day', 'service', 'track', 'time', 'code']);
+        $request->session()->forget(['name', 'phone', 'day', 'service', 'track', 'time', 'code', "edite"]);
 
         $phone = $request->all("phone")["phone"];
         $track = $request->all("track")["track"];
@@ -487,6 +562,8 @@ class usercontroller extends Controller
                 "External" => "20000",
             ];
             session(['time' => $Totaltable[0]->time]);
+            session(['phone' => $Totaltable[0]->phone]);
+            session(['name' => $Totaltable[0]->name]);
             session(['code' => $Totaltable[0]->code]);
             session(['day' => $Totaltable[0]->day]);
             session(['service' => $Totaltable[0]->service]);
@@ -506,5 +583,26 @@ class usercontroller extends Controller
             // redirect to new view
             return view('wrongpass');
         }
+    }
+
+    public function edite(Request $request)
+    {
+        $code = $request->all("editecode")["editecode"];
+        session(["edite" => $code]);
+        // Timetable
+        $all = Timetable::all()->toArray();
+        $final = [];
+        foreach ($all as $key => $value) {
+            for ($i = 0; $i < 144; $i++) {
+                if ($value[$i] == 2) {
+                    $final[$key][$i] = "bg-red-600";
+                } else {
+                    $final[$key][$i] = "bg-green-600";
+                }
+            }
+        }
+        // pass into view
+
+        return view('reservation22', compact("final"));
     }
 }
