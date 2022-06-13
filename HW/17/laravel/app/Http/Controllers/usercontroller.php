@@ -166,6 +166,7 @@ class usercontroller extends Controller
 
     public function preProccess(Request $request)
     {
+        $request->session()->forget('track');
         session(["day" => $request->all("day")["day"]]);
         $day = $request->all("day")["day"];
         $service = $request->session()->get("service");
@@ -339,10 +340,6 @@ class usercontroller extends Controller
                 ->toArray());
             $currentUserId = ($a)[0]->id;
         }
-
-        echo '<pre>';
-        var_dump(session("track"));
-        echo '</pre>'.'<br>';
 
         if (!session("track")) {
             // fill reserve table/model
