@@ -16,8 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::get('/', [usercontroller::class,"home"]);
-Route::get('/', [usercontroller::class,"resrevationbase"])->name("resrevationbase");
-Route::post('/', [usercontroller::class,"resrevationbase"])->name("resrevationbase");
+Route::get('/', [usercontroller::class,"home"])->name("home");
+Route::get('/resrevationbase', [usercontroller::class,"resrevationbase"])->name("homelogin");
+Route::post('/resrevationbase', [usercontroller::class,"resrevationbase"])->name("homelogin");
 
 Route::get('/track', function () {
     return view('track');
@@ -43,8 +44,8 @@ Route::get('/reservation2/Auto/pre_proccess/confirmed', [usercontroller::class,"
 Route::get('/reservation2/Manual/pre_proccess/confirmed', [usercontroller::class,"confirmedTime"])->name("confirmedTime");
 
 Route::post('/searchtracknumber', [usercontroller::class,"searchtracknumber"]);
-Route::post('/cancel', [usercontroller::class,"cancel"]);
-Route::post('/edite', [usercontroller::class,"edite"]);
+Route::post('/cancel', [usercontroller::class,"cancel"])->name("cancel");
+Route::post('/edite', [usercontroller::class,"edite"])->name("edite");
 
 Route::get('/loginform', [AuthController::class,"loginform"])->name("loginform");
 Route::get('/registerform', [AuthController::class,"registerform"])->name("registerform");

@@ -69,7 +69,7 @@ class AuthController extends Controller
         ->get()
         ->toArray());
 
-        // dd($a);
+        // dd($turns);
         return view('userdashboard',compact("turns"));
     }
     return  redirect()->route("loginform")->with("loginerror", "Be Carefull sir, your inputed info are wrong");

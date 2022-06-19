@@ -19,7 +19,7 @@
         <div class="flex inline-flex font-bold text-xl">
             @auth
             <div class="px-4 ">
-                <a href="../../../../../">New Reservation</a>
+                <a href="{{route('homelogin')}}">New Reservation</a>
             </div>
             @endauth
             <div class="px-2">

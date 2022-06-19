@@ -2,7 +2,6 @@
 
 
 @section("body")
-<form action="" method="POST">
     <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-gray-800 py-6 px-6">
         @CSRF
         <p class="font-extrabold text-lg text-center mb-8 border-b-2">Your all reservation are as below:</p>
@@ -17,12 +16,15 @@
                 <td class="mr-8">{{$turn->day}}</td>
                 <td class="mx-4">{{$turn->time}}</td>
                 <td class="flex flex-row mx-4">
-                    <form action="" method="post">
-                        <input type="hidden" name="reserveid" value="{{$turn->id}}">
+                    <form action="{{route('cancel')}}" method="post">
+                        @csrf
+                        <input type="hidden" name="cancelcode" value="{{$turn->code}}">
                         <button>Cancel</button>
                     </form>
-                    <form action="" method="post">
-                        <input type="hidden" name="reserveid" value="{{$turn->id}}">
+                    <form action="{{route('edite')}}" method="post">
+                        @csrf
+                        <input type="hidden" name="service" value="{{$turn->service}}">
+                        <input type="hidden" name="editecode" value="{{$turn->code}}">
                         <button>Edite</button>
                     </form>
                 </td>
@@ -31,6 +33,5 @@
         </table>
 
     </div>
-</form>
 
 @endsection()
