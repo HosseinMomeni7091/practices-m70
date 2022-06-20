@@ -59,7 +59,9 @@ class AuthController extends Controller
 
       if ($a) {
         $adminstatus = ($a)[0]->is_admin;
-        // dd($adminstatus);
+      if ($adminstatus) {
+        return view('managerdashboard');
+      }
       }
 
       // total reservation

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\usercontroller;
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,14 @@ Route::post('/profilesave', [AuthController::class,"profilesave"])->name("profil
 Route::get('/Logout', [AuthController::class,"Logout"])->name("logout");
 
 
+Route::get('/reservationlist', [ManagerController::class,"reservationlist"])->name("reservationlist");
+Route::get('/userlist', [ManagerController::class,"userlist"])->name("userlist");
+Route::get('/servicelist', [ManagerController::class,"servicelist"])->name("servicelist");
+Route::post('/reservedetail', [ManagerController::class,"reservedetail"])->name("reservedetail");
+
+
+Route::post('/servicefilter', [ManagerController::class,"servicefilter"])->name("servicefilter");
+Route::post('/dayfilter', [ManagerController::class,"dayfilter"])->name("dayfilter");
 
 
 
