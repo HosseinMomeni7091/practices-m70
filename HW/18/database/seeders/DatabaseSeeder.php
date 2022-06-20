@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
+use Database\Seeders\ServiceSeeder;
 use Database\Seeders\TimeTableSeeder;
 use Database\Seeders\ReservationSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -28,7 +29,8 @@ class DatabaseSeeder extends Seeder
             [
                 TimeTableSeeder::class,
                 UserSeeder::class,
-                ReservationSeeder::class
+                ReservationSeeder::class,
+                ServiceSeeder::class,
             ]
             );
     }

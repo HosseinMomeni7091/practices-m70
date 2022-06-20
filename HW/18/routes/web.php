@@ -69,6 +69,11 @@ Route::post('/servicefilter', [ManagerController::class,"servicefilter"])->name(
 Route::post('/dayfilter', [ManagerController::class,"dayfilter"])->name("dayfilter");
 
 
+Route::post('/editeservice', [ManagerController::class,"editeservice"])->name("editeservice");
+Route::post('/removeservice', [ManagerController::class,"removeservice"])->name("removeservice");
+Route::post('/createservice', [ManagerController::class,"createservice"])->name("createservice");
+
+
 
 
 

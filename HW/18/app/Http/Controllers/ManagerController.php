@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ServiceType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -48,19 +49,19 @@ class ManagerController extends Controller
             5 => "Thursday",
             6 => "Friday"
         ];
-        
+
         if ($request->only("service")["service"] == "all") {
             $users = DB::table('reservations')
-            ->select('reservations.*')
-            ->get()
-            ->toArray();
+                ->select('reservations.*')
+                ->get()
+                ->toArray();
             return view('tabelereservation', compact("users", "services", "days"));
         } else {
             $users = DB::table('reservations')
-            ->select('reservations.*')
-            ->where("service",$request->only("service")["service"])
-            ->get()
-            ->toArray();
+                ->select('reservations.*')
+                ->where("service", $request->only("service")["service"])
+                ->get()
+                ->toArray();
             return view('tabelereservation', compact("users", "services", "days"));
         }
     }
@@ -81,19 +82,19 @@ class ManagerController extends Controller
             5 => "Thursday",
             6 => "Friday"
         ];
-        
+
         if ($request->only("day")["day"] == "all") {
             $users = DB::table('reservations')
-            ->select('reservations.*')
-            ->get()
-            ->toArray();
+                ->select('reservations.*')
+                ->get()
+                ->toArray();
             return view('tabelereservation', compact("users", "services", "days"));
         } else {
             $users = DB::table('reservations')
-            ->select('reservations.*')
-            ->where("day",$request->only("day")["day"])
-            ->get()
-            ->toArray();
+                ->select('reservations.*')
+                ->where("day", $request->only("day")["day"])
+                ->get()
+                ->toArray();
             return view('tabelereservation', compact("users", "services", "days"));
         }
     }
@@ -202,9 +203,6 @@ class ManagerController extends Controller
 
         return view('totalusersinfo', compact("totalinfo"));
     }
-    public function servicelist()
-    {
-    }
 
     public function reservedetail(Request $request)
     {
@@ -217,5 +215,73 @@ class ManagerController extends Controller
 
         // dd($users);
         return view('reservedetails', compact("users"));
+    }
+
+    public function servicelist()
+    {
+        $services = DB::table('service_types')
+            ->select('service_types.*')
+            ->get()
+            ->toArray();
+
+        return view('servicesinfo', compact("services"));
+    }
+
+    public function editeservice(Request $request)
+    {
+        // dd($request->all(), $request->only("name")["name"]);
+        if ($request->only("name")["name"] != null) {
+            DB::table('service_types')
+                ->where('id', $request->only("id")["id"])
+                ->update(['name' => $request->only("name")["name"]]);
+        }
+        if ($request->only("time")["time"] != null) {
+            DB::table('service_types')
+                ->where('id', $request->only("id")["id"])
+                ->update(['time' => $request->only("time")["time"]]);
+        }
+        if ($request->only("cost")["cost"] != null) {
+            DB::table('service_types')
+                ->where('id', $request->only("id")["id"])
+                ->update(['cost' => $request->only("cost")["cost"]]);
+        }
+
+        $services = DB::table('service_types')
+            ->select('service_types.*')
+            ->get()
+            ->toArray();
+
+        return view('servicesinfo', compact("services"));
+    }
+
+    public function removeservice(Request $request)
+    {
+
+        // dd($request->all());
+
+        if ($request->only("id")["id"] != null) {
+            DB::table('service_types')
+                ->where('id', $request->only("id")["id"])
+                ->delete();
+        }
+
+        $services = DB::table('service_types')
+            ->select('service_types.*')
+            ->get()
+            ->toArray();
+
+        return view('servicesinfo', compact("services"));
+    }
+
+    public function createservice(Request $request)
+    {
+        ServiceType::create($request->only("name","time","cost"));
+
+        $services = DB::table('service_types')
+            ->select('service_types.*')
+            ->get()
+            ->toArray();
+
+        return view('servicesinfo', compact("services"));
     }
 }
