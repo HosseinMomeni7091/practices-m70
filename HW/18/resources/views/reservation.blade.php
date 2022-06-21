@@ -9,9 +9,9 @@
             <label for="Service" class="block text-2xl font-bold text-gray-800 dark:text-gray-400">Service :</label>
             <select name="service" id="Service" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                 <option class="text-basic font-bold" selected="">Choose a ServiceType</option>
-                <option class="text-basic font-bold" value="Basic">Basic CarWash (D:60 Min)</option>
-                <option class="text-basic font-bold" value="Internal">Internal CarWash(D:20 Min)</option>
-                <option class="text-basic font-bold" value="External">External CarWash(D:15 Min)</option>
+                @foreach ($services as $service)
+                <option class="text-basic font-bold" value="{{$service['name']}}">{{$service["name"]}} CarWash (D:{{$service["time"]}} Min)</option>
+                @endforeach
             </select>
         </div>
 

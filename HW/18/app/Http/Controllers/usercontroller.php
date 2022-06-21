@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Timetable;
 use App\Models\Reservation;
+use App\Models\ServiceType;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,14 @@ class usercontroller extends Controller
     }
     public function resrevationbase(Request $request)
     {
-        return view('reservation');
+        // ServiceType
+        $services = ServiceType::all()->toArray();
+        // $serviceMap = [];
+        // foreach ($services as $key => $value) {
+        //     $serviceMap[] = $value["name"];
+        // }
+        
+        return view('reservation',compact("services"));
     }
     public function type(Request $request)
     {
@@ -62,12 +70,21 @@ class usercontroller extends Controller
             "Thursday" => "5",
             "Friday" => "6"
         ];
+        
+        
         $map2 = [
             "Basic" => 12,
             "Internal" => 4,
             "External" => 3,
         ];
-
+        // ServiceType
+        $services = ServiceType::all()->toArray();
+        $map2 = [];
+        foreach ($services as $key => $value) {
+            $map2[$value["name"]] = $value["time"] / 5;
+        }
+        // dd($service,$map2);
+        
         $all = Timetable::all()->toArray();
         $final = [];
 
@@ -119,6 +136,8 @@ class usercontroller extends Controller
         $Day = session("day");
         $Time = session("pretime");
 
+        // dd($Day,$Time);
+
         // redirect data into related view
         return view('reservation21', compact("Day", "Time"));
     }
@@ -127,6 +146,8 @@ class usercontroller extends Controller
     {
 
         // Maping for fill tables
+
+
         $serviceMap = [
             "Basic" => "Basic CarWash",
             "Internal" => "External CarWash",
@@ -138,6 +159,19 @@ class usercontroller extends Controller
             "External" => "20000",
         ];
 
+
+        // ServiceType
+        $services = ServiceType::all()->toArray();
+        $serviceMap = [];
+        foreach ($services as $key => $value) {
+            $serviceMap[$value["name"]] = $value["name"];
+        }
+        $costMap = [];
+        foreach ($services as $key => $value) {
+            $costMap[$value["name"]] = $value["cost"];
+        }
+
+        // dd($serviceMap,$costMap);
         // Redirect to final Page
         $code = Str::random(8);
         session(['code' => "$code"]);
@@ -193,6 +227,12 @@ class usercontroller extends Controller
             "Internal" => 4,
             "External" => 3,
         ];
+        // ServiceType
+        $services = ServiceType::all()->toArray();
+        $map2 = [];
+        foreach ($services as $key => $value) {
+            $map2[$value["name"]] = $value["time"] / 5;
+        }
 
         $all = Timetable::all()->toArray();
         $final = [];
@@ -321,6 +361,17 @@ class usercontroller extends Controller
             "External" => "20000",
         ];
 
+
+        // ServiceType
+        $services = ServiceType::all()->toArray();
+        $serviceMap = [];
+        foreach ($services as $key => $value) {
+            $serviceMap[$value["name"]] = $value["name"];
+        }
+        $costMap = [];
+        foreach ($services as $key => $value) {
+            $costMap[$value["name"]] = $value["cost"];
+        }
 
         // Fill user and reserve table 
 
@@ -587,6 +638,16 @@ class usercontroller extends Controller
                 "Internal" => "30000",
                 "External" => "20000",
             ];
+            // ServiceType
+            $services = ServiceType::all()->toArray();
+            $serviceMap = [];
+            foreach ($services as $key => $value) {
+                $serviceMap[$value["name"]] = $value["name"];
+            }
+            $costMap = [];
+            foreach ($services as $key => $value) {
+                $costMap[$value["name"]] = $value["cost"];
+            }
             session(['time' => $Totaltable[0]->time]);
             session(['phone' => $Totaltable[0]->phone]);
             session(['name' => $Totaltable[0]->name]);
