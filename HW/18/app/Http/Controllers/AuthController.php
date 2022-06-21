@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -20,7 +21,15 @@ class AuthController extends Controller
   public function register(Request $request)
   {
     $user = $request->only("name", "family", "email", "phone", "password");
-    $res = User::create($user);
+    $res = User::create([
+      "name" => $request->get('name'),
+      "family" => $request->get('family'),
+      "email" => $request->get('email'),
+      "phone" => $request->get('phone'),
+      "password" => Hash::make($request->get('password')),
+    ]);
+
+
     $userinfo =  User::where('email', $request->get('email'))->first();
     // Auth()->login($userinfo);
     session(["name" => $request->only("name")]);
@@ -29,8 +38,34 @@ class AuthController extends Controller
     session(["email" => $request->only("email")]);
     session(["password" => $request->only("password")]);
     // dd(session("name"),session("phone"),$user,$res);
-    redirect()->route("userDashboard");
-    dd($user, $res);
+
+    $result = auth()->attempt($request->only("email", "password"));
+    // dd($result,auth()->user());
+    //is_admin?
+    $a = (DB::table('users')
+      ->select("is_admin")
+      ->where('email', $request->only("email"))
+      ->get()
+      ->toArray());
+
+    if ($a) {
+      $adminstatus = ($a)[0]->is_admin;
+      if ($adminstatus) {
+        return view('managerdashboard');
+      }
+    }
+
+    // total reservation
+    $turns = (DB::table('reservations')
+      ->select("reservations.*")
+      ->where('user_id', auth()->user()->id)
+      ->get()
+      ->toArray());
+
+    // dd($turns);
+    return view('userdashboard', compact("turns"));
+    // redirect()->route("userDashboard");
+    // dd($user, $res);
   }
 
 
@@ -59,9 +94,9 @@ class AuthController extends Controller
 
       if ($a) {
         $adminstatus = ($a)[0]->is_admin;
-      if ($adminstatus) {
-        return view('managerdashboard');
-      }
+        if ($adminstatus) {
+          return view('managerdashboard');
+        }
       }
 
       // total reservation
@@ -71,8 +106,8 @@ class AuthController extends Controller
         ->get()
         ->toArray());
 
-        // dd($turns);
-        return view('userdashboard',compact("turns"));
+      // dd($turns);
+      return view('userdashboard', compact("turns"));
     }
     return  redirect()->route("loginform")->with("loginerror", "Be Carefull sir, your inputed info are wrong");
   }
@@ -83,72 +118,72 @@ class AuthController extends Controller
     return redirect()->route("loginform");
   }
 
-  public function profilepage(Request $request) 
+  public function profilepage(Request $request)
   {
     $a = (DB::table('users')
-    ->select("users.*")
-    ->where('email',session("email"))
-    ->get()
-    ->toArray());
+      ->select("users.*")
+      ->where('email', session("email"))
+      ->get()
+      ->toArray());
 
     $name = ($a)[0]->name;
     $family = ($a)[0]->family;
     $email = ($a)[0]->email;
     $phone = ($a)[0]->phone;
 
-    return view("profilepage",compact("name","family","email","phone"));
+    return view("profilepage", compact("name", "family", "email", "phone"));
   }
-  public function profilesave(Request $request) 
+  public function profilesave(Request $request)
   {
 
     $a = (DB::table('users')
-    ->select("users.id")
-    ->where('email',session("email"))
-    ->get()
-    ->toArray());
+      ->select("users.id")
+      ->where('email', session("email"))
+      ->get()
+      ->toArray());
 
     // if(!$request->only("name")["name"]){
     //   echo "salam";
     //   dd($request->only("name"),$a,session("email"),($a)[0]->id);
     // }
     // dd($request->only("family")["family"]);
-     
-    
+
+
     $user = User::find(($a)[0]->id);
 
-    if($request->only("name")["name"]!=null){
+    if ($request->only("name")["name"] != null) {
       $user->update([
-          "name" => $request->only("name")["name"],
+        "name" => $request->only("name")["name"],
       ]);
     }
-    if($request->only("family")["family"]!=null){
+    if ($request->only("family")["family"] != null) {
       $user->update([
-          "family" => $request->only("family")["family"],
+        "family" => $request->only("family")["family"],
       ]);
       // dd($user);
     }
-    if($request->only("email")["email"]!=null){
+    if ($request->only("email")["email"] != null) {
       $user->update([
-          "email" => $request->only("email")["email"],
+        "email" => $request->only("email")["email"],
       ]);
     }
-    if($request->only("phone")["phone"]!=null){
+    if ($request->only("phone")["phone"] != null) {
       $user->update([
-          "phone" => $request->only("phone")["phone"],
+        "phone" => $request->only("phone")["phone"],
       ]);
     }
 
     $a = (DB::table('users')
-    ->select("users.*")
-    ->where('email',session("email"))
-    ->get()
-    ->toArray());
+      ->select("users.*")
+      ->where('email', session("email"))
+      ->get()
+      ->toArray());
 
     $name = ($a)[0]->name;
     $family = ($a)[0]->family;
     $email = ($a)[0]->email;
     $phone = ($a)[0]->phone;
 
-    return view("profilepage",compact("name","family","email","phone"));
+    return view("profilepage", compact("name", "family", "email", "phone"));
   }
 }
