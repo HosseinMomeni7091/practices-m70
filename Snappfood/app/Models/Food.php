@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Order;
+use App\Models\Category;
+use App\Models\Restaurant;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Food extends Model
 {
@@ -15,6 +18,17 @@ class Food extends Model
         "image",
         "discount",
         "is_foodparty",
-        "category_id",
     ];
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
+    }
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

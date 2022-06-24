@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\User;
+use App\Models\Food;
 use App\Models\Order;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,14 +15,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('food_order', function (Blueprint $table) {
             $table->id();
-            $table->string("comment");
-            $table->string("reply")->nullable();
-            $table->boolean("is_accept")->default(false);
-            $table->boolean("delete_request")->default(false);;
+            $table->foreignIdFor(Food::class)->nullable();
             $table->foreignIdFor(Order::class)->nullable();
-            $table->foreignIdFor(User::class)->nullable();
             $table->timestamps();
         });
     }
@@ -34,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('food_order');
     }
 };

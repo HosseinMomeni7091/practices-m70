@@ -2,7 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FoodController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SellerController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AuthFormController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\RestaurantController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +30,41 @@ Route::get('/', function () {
 
 Route::any("/login",[AuthController::class,"login"])->name("login");
 Route::any("/register",[AuthController::class,"register"])->name("register");
+Route::any("/logout",[AuthController::class,"logout"])->name("logout");
 
 
 Route::any("/loginform",[AuthFormController::class,"loginform"])->name("loginform");
 Route::any("/registerform",[AuthFormController::class,"registerform"])->name("registerform");
+
+
+Route::resource('restaurants', RestaurantController::class);
+Route::resource('foods', FoodController::class);
+Route::resource('orders', OrderController::class);
+Route::resource('comments', CommentController::class);
+Route::resource('categories', CategoryController::class);
+
+// admincontroller - router
+Route::get("/restaurantCategories",[AdminController::class,"restaurantCategories"])->name("restaurantCategories");
+Route::get("/foodCategories",[AdminController::class,"foodCategories"])->name("foodCategories");
+Route::get("/discounts",[AdminController::class,"discounts"])->name("discounts");
+Route::get("/comments",[AdminController::class,"comments"])->name("comments");
+Route::get("/advertisements",[AdminController::class,"advertisements"])->name("advertisements");
+
+
+// sellercontroller - router
+Route::get("/currentOrders",[SellerController::class,"currentOrders"])->name("currentOrders");
+Route::get("/completedOrders",[SellerController::class,"completedOrders"])->name("completedOrders");
+Route::get("/sellReport",[SellerController::class,"sellReport"])->name("sellReport");
+Route::get("/foods",[SellerController::class,"foods"])->name("foods");
+Route::get("/sellerComments",[SellerController::class,"sellerComments"])->name("sellerComments");
+Route::get("/configuration",[SellerController::class,"configuration"])->name("configuration");
+
+
+
+
+// Route::any("/Restaurant/category",[RestaurantController::class,"index"])->name("Restaurant_category");
+
+
+
+
+

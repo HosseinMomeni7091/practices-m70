@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Restaurant;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -18,13 +19,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone');
             $table->string('address');
-            $table->integer('latitude');
-            $table->integer('longitude');
+            $table->string('latitude');
+            $table->string('longitude');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('restaurant_id')->nullable();
-            $table->string('role');
-            $table->rememberToken();
+            $table->foreignIdFor(Restaurant::class)->nullable();
+            $table->string("role");
+            // $table->enum("role",array("admin","seller","buyer"));
             $table->timestamps();
         });
     }

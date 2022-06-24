@@ -17,7 +17,15 @@ class RestaurantFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->name(),
+            'phone' => $this->faker->phoneNumber(),
+            'address' => $this->faker->address(),
+            'latitude' => 32,
+            'longitude' =>35,
+            'freight' => 12000,
+            'working_hour' => "9-16",
+            'bank_account' => "IR0696000000010324200001",
+            'is_active' => true,
         ];
     }
 }

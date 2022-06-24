@@ -21,9 +21,9 @@ return new class extends Migration
             $table->integer("cost");
             $table->integer("quantity");
             $table->string("status");
-            $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Restaurant::class)->constrained();
-            $table->foreignIdFor(Food::class)->constrained();
+            // $table->enum("status",array("progressing","preparating","Delivering","Delivered"));
+            $table->foreignIdFor(User::class)->nullable();
+            $table->foreignIdFor(Restaurant::class)->nullable();
             $table->timestamps();
         });
     }

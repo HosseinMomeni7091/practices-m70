@@ -17,6 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->string("type");
+            // $table->morphs("categoriable");
+            // $table->integer("categoriable_id");
+            // $table->string("categoriable_type");
             $table->timestamps();
         });
     }

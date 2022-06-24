@@ -24,11 +24,11 @@ return new class extends Migration
             $table->string("longitude");
             $table->integer("freight");
             $table->string("working_hour");
-            $table->integer("bank_account");
+            $table->string("bank_account");
             $table->string("picture")->nullable();
-            $table->boolean("is_active")->default("true");
-            $table->foreignIdFor(Food::class)->constrained();
-            $table->foreignIdFor(Category::class)->constrained();
+            $table->boolean("is_active")->default(true);
+            $table->foreignIdFor(Food::class)->nullable();
+            $table->foreignIdFor(Category::class)->nullable();
             $table->timestamps();
         });
     }
