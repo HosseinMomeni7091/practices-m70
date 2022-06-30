@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Food::class)->nullable();
             $table->foreignIdFor(Order::class)->nullable();
+            $table->integer("count")->default(1);
             $table->timestamps();
         });
     }

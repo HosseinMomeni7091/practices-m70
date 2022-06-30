@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Order;
 use App\Models\Category;
 use App\Models\Restaurant;
+use App\Models\FoodCategory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,7 +17,10 @@ class Food extends Model
         "raw",
         "price",
         "image",
+        "score",
         "discount",
+        "restaurant_id",
+        "food_category_id",
         "is_foodparty",
     ];
     public function restaurant()
@@ -25,10 +29,10 @@ class Food extends Model
     }
     public function orders()
     {
-        return $this->belongsToMany(Order::class);
+        return $this->belongsToMany(Order::class)->withPivot('count')->withTimestamps();
     }
-    public function category()
+    public function foodcategory()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(FoodCategory::class);
     }
 }

@@ -3,14 +3,21 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\RestAddress;
+use App\Models\UserAddress;
 use Illuminate\Database\Seeder;
 use Database\Seeders\FoodSeeder;
+use Database\Seeders\UserSeeder;
 use Database\Seeders\OrderSeeder;
 use Illuminate\Support\Facades\DB;
 use Database\Seeders\CommentSeeder;
 use Database\Seeders\CategorySeeder;
 use Illuminate\Support\Facades\Hash;
 use Database\Seeders\RestaurantSeeder;
+use Database\Seeders\RestAddressSeeder;
+use Database\Seeders\UserAddressSeeder;
+use Database\Seeders\FoodCategorySeeder;
+use Database\Seeders\RestCategorySeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
@@ -26,30 +33,43 @@ class DatabaseSeeder extends Seeder
        
             ['name' => "admin",
             'phone' => "09193337476",
-            'address' => "semnan",
-            'latitude' => "32",
-            'longitude' =>"35",
             'role' => "admin",
             'email' => "hossein.momeni@yahoo.com",
             'password' => Hash::make("123")],
             
-            ['name' => "hossein",
+            ['name' => "hossein_seller",
             'phone' => "09193337477",
-            'address' => "semnan",
-            'latitude' => "33",
-            'longitude' =>"35",
             'role' => "seller",
+            // 'restaurant_id' => "1",
             'email' => "hossein.momeni7091@yahoo.com",
-            'password' => Hash::make("123"),]
+            'password' => Hash::make("123")],
+
+            ['name' => "hossein_seller",
+            'phone' => "09193337478",
+            'role' => "seller",
+            // 'restaurant_id' => "2",
+            'email' => "hossein.momeni7092@yahoo.com",
+            'password' => Hash::make("123")],
+
+            ['name' => "hossein",
+            'phone' => "09193337479",
+            'role' => "buyer",
+            'email' => "hossein.momeni7093@yahoo.com",
+            'password' => Hash::make("123")]
         ]);
-        User::factory(10)->create();
+        // User::factory(10)->create();
 
         $this->call([
-            CategorySeeder::class,
+            FoodCategorySeeder::class,
+            RestCategorySeeder::class,
+            UserAddressSeeder::class,
+            RestAddressSeeder::class,
             CommentSeeder::class,
             FoodSeeder::class,
             OrderSeeder::class,
             RestaurantSeeder::class,
+            // UserAddress::class,
+            // RestAddress::class,
         ]);
     }
 }

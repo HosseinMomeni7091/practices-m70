@@ -1,13 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\AuthFormController;
+use App\Http\Controllers\Auth\SellerController;
+use App\Http\Controllers\Auth\AdminController;
+
 use App\Http\Controllers\FoodController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\SellerController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\AuthFormController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RestaurantController;
 

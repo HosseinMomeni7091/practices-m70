@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Discount;
 use App\Models\Food;
 use App\Models\User;
 use App\Models\Restaurant;
@@ -19,10 +20,11 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer("cost");
-            $table->integer("quantity");
+            $table->integer("quantity")->nullable();
             $table->string("status");
             // $table->enum("status",array("progressing","preparating","Delivering","Delivered"));
             $table->foreignIdFor(User::class)->nullable();
+            $table->foreignIdFor(Discount::class)->nullable();
             $table->foreignIdFor(Restaurant::class)->nullable();
             $table->timestamps();
         });

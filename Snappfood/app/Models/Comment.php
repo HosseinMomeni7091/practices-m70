@@ -13,6 +13,7 @@ class Comment extends Model
     protected $fillable=[
         "comment",
         "reply",
+        "score",
         "is_accept",
         "deleted_request",
         "order_id",

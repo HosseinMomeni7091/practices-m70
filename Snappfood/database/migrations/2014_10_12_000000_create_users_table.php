@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Restaurant;
+use App\Models\UserAddress;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -18,13 +19,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone');
-            $table->string('address');
-            $table->string('latitude');
-            $table->string('longitude');
             $table->string('email')->unique();
             $table->string('password');
-            $table->foreignIdFor(Restaurant::class)->nullable();
             $table->string("role");
+            $table->foreignIdFor(Restaurant::class)->nullable();
             // $table->enum("role",array("admin","seller","buyer"));
             $table->timestamps();
         });

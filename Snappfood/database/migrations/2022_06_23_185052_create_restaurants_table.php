@@ -1,7 +1,10 @@
 <?php
 
-use App\Models\Category;
 use App\Models\Food;
+use App\Models\Category;
+use App\Models\Schedule;
+use App\Models\RestAddress;
+use App\Models\RestCategory;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -19,16 +22,14 @@ return new class extends Migration
             $table->id();
             $table->string("name");
             $table->string("phone");
-            $table->string("address");
-            $table->string("latitude");
-            $table->string("longitude");
+            $table->foreignIdFor(RestAddress::class)->nullable();
             $table->integer("freight");
-            $table->string("working_hour");
+            $table->integer("score")->default(5);
+            $table->foreignIdFor(Schedule::class)->nullable();
             $table->string("bank_account");
             $table->string("picture")->nullable();
             $table->boolean("is_active")->default(true);
-            $table->foreignIdFor(Food::class)->nullable();
-            $table->foreignIdFor(Category::class)->nullable();
+            $table->foreignIdFor(RestCategory::class)->nullable();
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Food;
 use App\Models\User;
 use App\Models\Comment;
+use App\Models\Discount;
 use App\Models\Restaurant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,7 @@ class Order extends Model
         "status",
         "user_id",
         "restaurant_id",
+        "discount_id",
     ];
     public function restaurant()
     {
@@ -27,9 +29,13 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function discount()
+    {
+        return $this->belongsTo(Discount::class);
+    }
     public function foods()
     {
-        return $this->belongsToMany(Food::class);
+        return $this->belongsToMany(Food::class)->withPivot('count')->withTimestamps();
     }
     public function comments()
     {

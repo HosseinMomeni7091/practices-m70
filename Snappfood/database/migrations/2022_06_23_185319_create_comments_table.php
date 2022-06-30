@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->string("comment");
             $table->string("reply")->nullable();
+            $table->integer("score")->default(5);
             $table->boolean("is_accept")->default(false);
             $table->boolean("delete_request")->default(false);;
             $table->foreignIdFor(Order::class)->nullable();

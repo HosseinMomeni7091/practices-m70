@@ -6,6 +6,9 @@ use App\Models\Food;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Category;
+use App\Models\Schedule;
+use App\Models\RestAddress;
+use App\Models\RestCategory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -15,15 +18,14 @@ class Restaurant extends Model
     protected $fillable = [
         "name",
         "phone",
-        "address",
-        "latitude",
-        "longitude",
+        "rest_address_id",
+        "rest_category_id",
         "freight",
-        "working_hour",
+        "score",
+        "schedule_id",
         "bank_account",
         "picture",
         "is_active",
-        "food_id",
     ];
 
     public function foods()
@@ -38,8 +40,16 @@ class Restaurant extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function category()
+    public function restcategory()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(RestCategory::class);
+    }
+    public function schedule()
+    {
+        return $this->hasOne(Schedule::class);
+    }
+    public function restaddress()
+    {
+        return $this->hasOne(RestAddress::class);
     }
 }
