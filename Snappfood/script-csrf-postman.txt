@@ -1,0 +1,8 @@
+pm.sendRequest({
+url: pm.variables.get('APP_URL') + 'sanctum/csrf-cookie',
+method: 'GET'
+}, function (error, response, { cookies }) {
+if (!error) {
+pm.environment.set('XSRF_TOKEN', cookies.get('XSRF-TOKEN'))
+}
+})

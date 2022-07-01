@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Schedule;
 use App\Models\RestAddress;
 use App\Models\UserAddress;
 use Illuminate\Database\Seeder;
@@ -12,6 +13,7 @@ use Database\Seeders\OrderSeeder;
 use Illuminate\Support\Facades\DB;
 use Database\Seeders\CommentSeeder;
 use Database\Seeders\CategorySeeder;
+use Database\Seeders\ScheduleSeeder;
 use Illuminate\Support\Facades\Hash;
 use Database\Seeders\RestaurantSeeder;
 use Database\Seeders\RestAddressSeeder;
@@ -68,6 +70,7 @@ class DatabaseSeeder extends Seeder
             FoodSeeder::class,
             OrderSeeder::class,
             RestaurantSeeder::class,
+            ScheduleSeeder::class
             // UserAddress::class,
             // RestAddress::class,
         ]);

@@ -50,6 +50,6 @@ class Restaurant extends Model
     }
     public function restaddress()
     {
-        return $this->hasOne(RestAddress::class);
+        return $this->belongsTo(RestAddress::class,"rest_address_id");
     }
 }

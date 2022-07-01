@@ -21,13 +21,13 @@ class UserAddressSeeder extends Seeder
             "address"=> "Tehran, Tehran, St. Africa",
             "latitude"=> 35.715298,
             "longitude"=> 51.404343,
-            "user_id"=> 1],
+            "user_id"=> 4],
 
             ["title"=> "Campany",
             "address"=> "Tehran, Tehran, St. Tarasht",
             "latitude"=> 35.715315,
             "longitude"=> 51.404398,
-            "user_id"=> 1],
+            "user_id"=> 4],
 
             ["title"=> "Campany",
             "address"=> "Tehran, Tehran, St. Tarasht",

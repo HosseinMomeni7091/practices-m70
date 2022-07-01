@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RestCategorySeeder extends Seeder
 {
@@ -14,6 +15,15 @@ class RestCategorySeeder extends Seeder
      */
     public function run()
     {
-        //
+        DB::table('rest_categories')->insert([
+       
+            [
+            "name"=>"fastfood"
+            ],
+            [
+            "name"=>"sonatti"
+            ],
+
+        ]);
     }
 }

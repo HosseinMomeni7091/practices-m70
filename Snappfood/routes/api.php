@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\API\ApiAddressController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ApiAuthController;
+use App\Http\Controllers\API\ApiAddressController;
+use App\Http\Controllers\API\ApiRestaurantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,14 @@ Route::post('/login', [APiAuthController::class, 'login']);
 
 // Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/addresses', [ApiAddressController::class, 'index']);
     Route::post('/addresses', [ApiAddressController::class, 'store']);
+    Route::post('/addresses/{address_id}', [ApiAddressController::class, 'currentAddress']);
+
+    Route::get('/restaurants/{restaurant_id}', [ApiRestaurantController::class, 'index']);
+    Route::get('/restaurants', [ApiRestaurantController::class, 'show']);
+    Route::get('/restaurants', [ApiRestaurantController::class, 'show']);
+    Route::get('/restaurants/{restaurant_id}/foods', [ApiRestaurantController::class, 'showFood']);
     // Route::post('/addresses/{}', [ApiAddressController::class, 'store']);
     // Route::put('/products/{id}', [ProductController::class, 'update']);
     // Route::delete('/products/{id}', [ProductController::class, 'destroy']);

@@ -15,7 +15,12 @@ class ApiAddressController extends Controller
      */
     public function index()
     {
-        //
+       
+       $addresses=UserAddress::where("user_id",auth()->user()->id)->get();
+        return response()->json([
+            "msg"=>"All Addresse of current user",
+            "data"=>$addresses,
+        ]);
     }
 
     /**
@@ -26,13 +31,20 @@ class ApiAddressController extends Controller
      */
     public function store(Request $request)
     {
+        // $fields = $request->validate([
+        //     'title' => 'required|string',
+        //     'address' => 'required',
+        //     'email' => 'required|string|unique:users,email',
+        //     'password' => 'required|string',
+        //     'role' => 'required',
+        // ]); 
         $request->validate([
             'title' => 'required',
             'address' => 'required',
             'latitude' => 'required',
             'longitude' => 'required'
         ]);
-        UserAddress::create([
+        $newaddress=UserAddress::create([
             'title' => $request->title,
             'address' => $request->address,
             'latitude' => $request->latitude,
@@ -42,10 +54,28 @@ class ApiAddressController extends Controller
 
         return response()->json([
             "msg"=>"address added successfully",
+            "detail"=>$newaddress
 
         ]);
     }
 
+    /**
+     * set address as current address of user.
+     *
+     * @param  int  $address_id
+     * @return \Illuminate\Http\Response
+     */
+    public function currentAddress($address_id)
+    {
+        $setallzero=UserAddress::where("user_id",auth()->user()->id)->update(["is_current"=>0]);
+        $addresses=UserAddress::where("id",$address_id)->update(["is_current"=>1]);
+
+        return response()->json([
+            "msg"=>"Current address set as default successfully.",
+            "detail"=>$addresses
+
+        ]);
+    }
     /**
      * Display the specified resource.
      *
