@@ -59,6 +59,7 @@ Route::get("/completedOrders",[SellerController::class,"completedOrders"])->name
 Route::get("/sellReport",[SellerController::class,"sellReport"])->name("sellReport");
 Route::get("/foods",[SellerController::class,"foods"])->name("foods");
 Route::get("/sellerComments",[SellerController::class,"sellerComments"])->name("sellerComments");
+Route::get("/foodParty",[SellerController::class,"foodParty"])->name("foodParty");
 Route::get("/configuration",[SellerController::class,"configuration"])->name("configuration");
 
 

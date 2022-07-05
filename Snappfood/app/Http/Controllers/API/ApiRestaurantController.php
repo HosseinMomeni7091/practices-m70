@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\Food;
 use App\Models\Restaurant;
+use App\Models\RestCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\Controller;
 
@@ -22,10 +23,10 @@ class ApiRestaurantController extends Controller
         //     "data"=>$res
         // ]);
         // $res=Restaurant::where("id",$restaurant_id)->get();
-        $res=Restaurant::with("restaddress")->where("id",$restaurant_id)->get();
+        $res = Restaurant::with("restaddress")->where("id", $restaurant_id)->get();
         return response()->json([
-            "requested id"=> $restaurant_id,
-            "data"=>$res
+            "requested id" => $restaurant_id,
+            "data" => $res
         ]);
     }
 
@@ -37,7 +38,6 @@ class ApiRestaurantController extends Controller
      */
     public function store($restaurant_id)
     {
-        
     }
 
     /**
@@ -46,18 +46,47 @@ class ApiRestaurantController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($request)
+    public function show(Request $request)
     {
-        $restaurant=Restaurant::query();
+
+        $condition = [];
+        if ($request->rest_category_name != null) {
+            $condition["name"] = $request->rest_category_name;
+        }
+        if ($request->is_active != null) {
+            $condition["is_active"] = $request->is_active;
+        }
+        if ($request->score != null) {
+            $condition["score"] = $request->score;
+
+        }
+        $categoryMape=RestCategory::all()->toArray();
+        foreach ($categoryMape as $key=>$value){
+            $map[$value["name"]]=$value["id"];
+        }
+        $restaurant = Restaurant::with("restcategory", "restaddress", "schedule");
+        if (count($condition) == 0) {
+            $result = $restaurant->get();
+            return response()->json([
+                "requested id" => "all",
+                "data" => $result
+            ]);
+        }
+
+        foreach ($condition as $key => $value) {
+            if ($key=="name"){
+                $restaurant->where("rest_category_id", $map[$value]);
+            }else{
+                $restaurant->where($key, $value);
+            }
+        }
+
+        $result = $restaurant->get();
+
         return response()->json([
-            "requested id"=> "all",
-            "data"=>$restaurant
+            "requested id" => $condition,
+            "data" => $result
         ]);
-        // $restaurant=Restaurant::all();
-        // return response()->json([
-        //     "requested id"=> "all",
-        //     "data"=>$restaurant
-        // ]);
     }
     /**
      * Display the specified resource.
@@ -67,7 +96,7 @@ class ApiRestaurantController extends Controller
      */
     public function showFood($restaurant_id)
     {
-        $foods=Food::where("restaurant_id",$restaurant_id)->get();
+        $foods = Food::where("restaurant_id", $restaurant_id)->get();
         // $foods=Food::all();
         return response($foods);
     }

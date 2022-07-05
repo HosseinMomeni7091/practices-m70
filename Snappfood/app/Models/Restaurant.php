@@ -42,11 +42,11 @@ class Restaurant extends Model
     }
     public function restcategory()
     {
-        return $this->belongsTo(RestCategory::class);
+        return $this->belongsTo(RestCategory::class,"rest_category_id");
     }
     public function schedule()
     {
-        return $this->hasOne(Schedule::class);
+        return $this->belongsTo(Schedule::class);
     }
     public function restaddress()
     {
