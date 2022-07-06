@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\Food;
 use App\Models\Restaurant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SellerController extends Controller
 {
@@ -22,8 +23,13 @@ class SellerController extends Controller
     }
     public function foods()
     {
-        $restinfo=Food::where("restaurant_id",auth()->user()->restaurant_id)->get()->toArray();
-        dd($restinfo);
+        // $foodinfo=Food::whereBelongsTo(auth()->user()->restaurant)->get()->toArray();
+        $foodinfos=Food::whereBelongsTo(auth()->user()->restaurant)->get();
+        // dd(auth()->user()->restaurant->id,auth()->user()->id,$restinfo);
+        // $url = Storage::url('images/food.jpg');
+        // dd($url);
+        // return view("seller.fooddashboard", compact($foodinfo));
+        return view("seller.fooddashboard", compact("foodinfos"));
     }
     public function sellerComments()
     {

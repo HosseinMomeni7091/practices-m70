@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string("role");
-            $table->foreignIdFor(Restaurant::class)->nullable();
+            // $table->foreignIdFor(Restaurant::class)->nullable();
             // $table->enum("role",array("admin","seller","buyer"));
             $table->timestamps();
         });

@@ -31,6 +31,8 @@ class RestaurantSeeder extends Seeder
             "rest_address_id"=> 1,
             "rest_category_id"=> 1,
             "schedule_id"=> 1,
+            "user_id"=> 4,
+            
             ],
             [
             "name"=> "Badgir",
@@ -41,6 +43,8 @@ class RestaurantSeeder extends Seeder
             "rest_address_id"=> 2,
             "rest_category_id"=> 1,
             "schedule_id"=> 2,
+            "user_id"=> 3,
+
             ],
             [
             "name"=> "Haj Rahim",
@@ -51,6 +55,8 @@ class RestaurantSeeder extends Seeder
             "rest_address_id"=> 3,
             "rest_category_id"=> 2,
             "schedule_id"=> 3,
+            "user_id"=> 2,
+
             ],
         ]);
     }

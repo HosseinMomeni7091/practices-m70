@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Food;
+use App\Models\User;
 use App\Models\Category;
 use App\Models\Schedule;
 use App\Models\RestAddress;
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->string("name");
             $table->string("phone");
             $table->foreignIdFor(RestAddress::class)->nullable();
+            $table->foreignIdFor(User::class)->nullable();
             $table->integer("freight");
             $table->integer("score")->default(5);
             $table->foreignIdFor(Schedule::class)->nullable();

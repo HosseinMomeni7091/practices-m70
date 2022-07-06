@@ -20,6 +20,7 @@ class Restaurant extends Model
         "phone",
         "rest_address_id",
         "rest_category_id",
+        "user_id",
         "freight",
         "score",
         "schedule_id",

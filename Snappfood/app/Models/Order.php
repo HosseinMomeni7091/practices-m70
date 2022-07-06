@@ -35,7 +35,7 @@ class Order extends Model
     }
     public function foods()
     {
-        return $this->belongsToMany(Food::class)->withPivot('count')->withTimestamps();
+        return $this->belongsToMany(Food::class)->withPivot('foodorder','count')->withTimestamps();
     }
     public function comments()
     {

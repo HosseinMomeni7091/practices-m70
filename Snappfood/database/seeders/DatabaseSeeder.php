@@ -36,28 +36,30 @@ class DatabaseSeeder extends Seeder
             ['name' => "admin",
             'phone' => "09193337476",
             'role' => "admin",
-            'restaurant_id' => null,
             'email' => "hossein.momeni@yahoo.com",
             'password' => Hash::make("123")],
             
             ['name' => "hossein_seller",
             'phone' => "09193337477",
             'role' => "seller",
-            'restaurant_id' => 1,
             'email' => "hossein.momeni7091@yahoo.com",
             'password' => Hash::make("123")],
 
             ['name' => "hossein_seller",
             'phone' => "09193337478",
             'role' => "seller",
-            'restaurant_id' => 2,
             'email' => "hossein.momeni7092@yahoo.com",
+            'password' => Hash::make("123")],
+
+            ['name' => "hossein_seller",
+            'phone' => "09133337478",
+            'role' => "seller",
+            'email' => "hossein.momeni7095@yahoo.com",
             'password' => Hash::make("123")],
             
             ['name' => "hossein",
             'phone' => "09193337479",
             'role' => "buyer",
-            'restaurant_id' => null,
             'email' => "hossein.momeni7093@yahoo.com",
             'password' => Hash::make("123")]
         ]);
