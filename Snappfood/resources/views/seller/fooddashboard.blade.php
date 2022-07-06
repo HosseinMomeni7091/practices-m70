@@ -6,6 +6,33 @@
 <div class="p-4 mb-4 text-sm text-blue-700 bg-blue-100 rounded-lg dark:bg-blue-200 dark:text-blue-800" role="alert">
     <span class="font-medium">food dashboard</span>
 </div>
+
+<div class="flex mx-8 rounded-lg p-4 flex-row bg-slate-300 justify-around items-center">
+    <form action="{{ route('allfoods') }}" method="POST">
+        @csrf
+        <label class="text-lg font-bold " for="">Name :</label>
+        <input class="w-64 h-10 rounded-md p-2 " type="text" name="namesearch">
+        <button class="w-32 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+    </form>
+    <form action="{{ route('allfoods') }}" method="POST">
+        @csrf
+        <label class="text-lg font-bold " for="">Categories</label>
+        <select class="w-64 h-10 rounded-md p-2 " name="categoryfilter">
+            <option value="all">All</option>
+            @foreach ($categories as $category)
+            <option value="{{$category->id}}">{{$category->name}}</option>
+            @endforeach
+        </select>
+        <button class="w-32 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Filter</button>
+    </form>
+    <form action="" method="POST">
+        @csrf
+        <button class=" w-40 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add New Food</button>
+    </form>
+
+</div>
+
+
 <div class="flex flex-row flex-wrap mx-2 my-2 gap-1">
     @foreach ($foodinfos as $foodinfo)
     <div class="mx-8 my-2 max-w-sm bg-rose-100 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
@@ -35,21 +62,28 @@
                 <span class="text-3xl font-bold text-gray-900 dark:text-white">{{$foodinfo->price}}</span>
                 @endif
                 @if(($foodinfo->discount)!=0)
-                <span class="text-3xl font-bold text-gray-500 dark:text-white line-through ">{{$foodinfo->price}}</span>
+                <span class="text-2xl font-bold text-gray-500 dark:text-white line-through ">{{$foodinfo->price}}</span>
+                <span class="text-base font-bold text-red-600 dark:text-white ">{{($foodinfo->discount)}}%</span>
+                <span class="text-3xl font-bold text-gray-900 dark:text-white ">{{intval($foodinfo->price)*(1-(intval($foodinfo->discount)/100))}}</span>
                 @endif
             </div>
-            <div class="flex flex-row justify-between">
-                <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edite</a>
-                <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Remove</a>
+            <div class="flex flex-row justify-between mt-4 mb-2">
+                <form action="{{ route('editefood') }}" method="Post">
+                    @csrf
+                    <input type="hidden" name="editefood" value="{{($foodinfo->id)}}">
+                    <button class=" w-40 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edite</button>
+                </form>
+                <form action="{{ route('foods.destroy', ['food' => $foodinfo]) }}" method="POST">
+                    @method('delete')
+                    @csrf
+                    <input type="hidden" name="deletefood" value="{{($foodinfo->id)}}">
+                    <button class=" w-40 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Delete</button>
+                </form>
             </div>
         </div>
     </div>
     @endforeach
 </div>
-
-
 </div>
-
-
 
 @endsection()

@@ -39,11 +39,11 @@ Route::any("/loginform",[AuthFormController::class,"loginform"])->name("loginfor
 Route::any("/registerform",[AuthFormController::class,"registerform"])->name("registerform");
 
 
-Route::resource('restaurants', RestaurantController::class);
+// Route::resource('restaurants', RestaurantController::class);
 Route::resource('foods', FoodController::class);
-Route::resource('orders', OrderController::class);
-Route::resource('comments', CommentController::class);
-Route::resource('categories', CategoryController::class);
+// Route::resource('orders', OrderController::class);
+// Route::resource('comments', CommentController::class);
+// Route::resource('categories', CategoryController::class);
 
 // admincontroller - router
 Route::get("/restaurantCategories",[AdminController::class,"restaurantCategories"])->name("restaurantCategories");
@@ -57,7 +57,9 @@ Route::get("/advertisements",[AdminController::class,"advertisements"])->name("a
 Route::get("/currentOrders",[SellerController::class,"currentOrders"])->name("currentOrders");
 Route::get("/completedOrders",[SellerController::class,"completedOrders"])->name("completedOrders");
 Route::get("/sellReport",[SellerController::class,"sellReport"])->name("sellReport");
-Route::get("/foods",[SellerController::class,"foods"])->name("foods");
+Route::get("/allfoods",[SellerController::class,"foods"])->name("allfoods");
+Route::post("/allfoods",[SellerController::class,"foods"])->name("allfoods");
+Route::post("/editefood",[SellerController::class,"editeFood"])->name("editefood");
 Route::get("/sellerComments",[SellerController::class,"sellerComments"])->name("sellerComments");
 Route::get("/foodParty",[SellerController::class,"foodParty"])->name("foodParty");
 Route::get("/configuration",[SellerController::class,"configuration"])->name("configuration");

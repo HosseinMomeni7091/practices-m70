@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Food;
+use App\Models\FoodCategory;
 use App\Http\Requests\StoreFoodRequest;
 use App\Http\Requests\UpdateFoodRequest;
 
@@ -70,7 +71,11 @@ class FoodController extends Controller
      */
     public function update(UpdateFoodRequest $request, Food $food)
     {
-        //
+        
+        
+        $categories = FoodCategory::select(["name", "id"])->get();
+        $foodinfos = Food::whereBelongsTo(auth()->user()->restaurant)->get();
+        return view("seller.fooddashboard", compact("foodinfos", "categories"));
     }
 
     /**
@@ -81,6 +86,10 @@ class FoodController extends Controller
      */
     public function destroy(Food $food)
     {
-        //
+        Food::find($food->id)->delete();
+        $categories = FoodCategory::select(["name", "id"])->get();
+        $foodinfos = Food::whereBelongsTo(auth()->user()->restaurant)->get();
+        return view("seller.fooddashboard", compact("foodinfos", "categories"));
+
     }
 }
