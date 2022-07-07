@@ -7,47 +7,60 @@
     <span class="font-medium">Edite Food Page </span>
 </div>
 
-
-<div class="px-2 mx-8">
-    <div class="flex flex-wrap justify-around mx-3 mb-6">
-        <div class="w-1/3  px-3 m-4">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                Name
-            </label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Doe" name="name">
-        </div>
-        <div class="w-1/3  px-3 m-4">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                Raw material
-            </label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Doe" name="raw">
-        </div>
-        <div class="w-1/3  px-3 m-4">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                Price
-            </label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="number" placeholder="Doe" name="price">
-        </div>
-        <div class="w-1/3  px-3 m-4">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                Discount
-            </label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="number" placeholder="Doe" name="discount">
-        </div>
-        <div class="w-full  px-3 ml-[109px] my-6">
-            <div class="flex items-center">
-                <input checked id="checked-checkbox" type="checkbox" value="true" class="w-8 h-8 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" name="is_foodparty">
-                <label for="checked-checkbox" class="ml-2 text-xl font-bold text-gray-900 dark:text-gray-300">This food is consist of Foodparty</label>
+<form action="{{route('foods.update',['food'=>$food])}}" enctype="multipart/form-data" method="POST">
+    @method('PUT')
+    @csrf
+    <div class="px-2 mx-8">
+        <div class="flex flex-wrap justify-around mx-3 mb-6">
+            <div class="w-1/3  px-3 m-4">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                    Name
+                </label>
+                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Doe" name="name" value="{{$food->name}}">
             </div>
-        </div>
-        <div class="w-full mx-28">
+            <div class="w-1/3  px-3 m-4">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                    Raw material
+                </label>
+                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="Doe" name="raw" value="{{$food->raw}}">
+            </div>
+            <div class="w-1/3  px-3 m-4">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                    Price
+                </label>
+                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="number" placeholder="Doe" name="price" value="{{$food->price}}">
+            </div>
+            <div class="w-1/3  px-3 m-4">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                    Discount
+                </label>
+                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="number" placeholder="Doe" name="discount" value="{{$food->discount}}">
+            </div>
+            <div class="w-full  px-3 ml-[109px] my-6">
+                <div class="flex items-center">
+                    <input checked id="checked-checkbox" type="checkbox" value="{{$food->is_foodparty}}" class="w-8 h-8 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" name="is_foodparty">
+                    <label for="checked-checkbox" class="ml-2 text-xl font-bold text-gray-900 dark:text-gray-300">This food is consist of Foodparty</label>
+                </div>
+            </div>
+            <div class="inline text-left w-1/3 h-52">
+                <div class="font-bold text-lg">Your Image is as below:</div>
+                <img class="rounded-lg" src="{{$food->image}}" alt="Your image">
+            </div>
 
-            <label class="block mb-2 text-lg font-bold text-gray-900 dark:text-gray-300" for="file_input">Upload food picture</label>
-            <input class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" name="image" type="file">
-            
+            <div class="w-full mx-28">
+
+                <label class="block mb-2 text-lg font-bold text-gray-900 dark:text-gray-300" for="file_input">Upload food picture</label>
+                <input class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" name="image" type="file">
+
+            </div>
+            <button class=" m-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Update
+            </button>
+
         </div>
     </div>
-</div>
+</form>
+
 
 
 

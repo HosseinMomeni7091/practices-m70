@@ -62,4 +62,9 @@ class SellerController extends Controller
         // dd($request->only("editefood")["editefood"],$food);
         return view("seller.foodedite", compact("food"));
     }
+    public function createfood()
+    {
+        $categories = FoodCategory::select(["name", "id"])->get();
+        return view("seller.addfood", compact("categories"));
+    }
 }

@@ -60,6 +60,7 @@ Route::get("/sellReport",[SellerController::class,"sellReport"])->name("sellRepo
 Route::get("/allfoods",[SellerController::class,"foods"])->name("allfoods");
 Route::post("/allfoods",[SellerController::class,"foods"])->name("allfoods");
 Route::post("/editefood",[SellerController::class,"editeFood"])->name("editefood");
+Route::get("/createfood",[SellerController::class,"createfood"])->name("createfood");
 Route::get("/sellerComments",[SellerController::class,"sellerComments"])->name("sellerComments");
 Route::get("/foodParty",[SellerController::class,"foodParty"])->name("foodParty");
 Route::get("/configuration",[SellerController::class,"configuration"])->name("configuration");
