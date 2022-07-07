@@ -39,7 +39,7 @@ Route::any("/loginform",[AuthFormController::class,"loginform"])->name("loginfor
 Route::any("/registerform",[AuthFormController::class,"registerform"])->name("registerform");
 
 
-// Route::resource('restaurants', RestaurantController::class);
+Route::resource('restaurants', RestaurantController::class);
 Route::resource('foods', FoodController::class);
 // Route::resource('orders', OrderController::class);
 // Route::resource('comments', CommentController::class);
@@ -64,6 +64,7 @@ Route::get("/createfood",[SellerController::class,"createfood"])->name("createfo
 Route::get("/sellerComments",[SellerController::class,"sellerComments"])->name("sellerComments");
 Route::get("/foodParty",[SellerController::class,"foodParty"])->name("foodParty");
 Route::get("/configuration",[SellerController::class,"configuration"])->name("configuration");
+Route::get("/updateconfiguration",[SellerController::class,"updateconfiguration"])->name("updateconfige");
 
 
 

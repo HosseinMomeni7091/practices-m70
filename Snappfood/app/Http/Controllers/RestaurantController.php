@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Restaurant;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreRestaurantRequest;
 use App\Http\Requests\UpdateRestaurantRequest;
 
@@ -34,9 +36,9 @@ class RestaurantController extends Controller
      * @param  \App\Http\Requests\StoreRestaurantRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRestaurantRequest $request)
+    public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
@@ -68,9 +70,29 @@ class RestaurantController extends Controller
      * @param  \App\Models\Restaurant  $restaurant
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRestaurantRequest $request, Restaurant $restaurant)
+    public function update(Request $request, Restaurant $restaurant)
     {
-        //
+        // dd($request->file('image'),$request->all());
+        if($request->file('image')!=null){
+            $path = Storage::putFile('/public/images', $request->file('image'));
+            $path=str_replace("public","storage",$path);
+            $restaurant->update([
+                "picture"=>$path
+            ]);
+        }
+        $restaurant->update([
+            "name"=>$request->only("name")["name"],
+            "phone"=>$request->only("phone")["phone"],
+            "freight"=>$request->only("freight")["freight"],
+            "bank_account"=>$request->only("bank_account")["bank_account"],
+        ]);
+        if($request->only("address")!=[]){
+            $restaurant->restaddress()->update([
+                "address"=>$request->only("address")["address"]
+            ]);
+        }
+        return view("seller.editedone");
+
     }
 
     /**

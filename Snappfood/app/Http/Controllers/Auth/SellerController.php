@@ -51,14 +51,26 @@ class SellerController extends Controller
     {
         // return view('registerform')->with("message","Please fill the following form");
     }
+    public function updateconfiguration()
+    {
+        $restinfo = Restaurant::where("user_id", auth()->user()->id)->get()->first();
+        // dd($restinfo->name);
+        return view("seller.updatesellerconfig", compact("restinfo"));
+    }
     public function configuration()
     {
-        $restinfo = Restaurant::find(auth()->user()->id)->toArray();
-        dd($restinfo);
+
+        $result = Restaurant::where("user_id", auth()->user()->id)->get()->first();
+        if ($result == null) {
+            $status = false;
+        } else {
+            $status = true;
+        }
+        return view("seller.sellerconfig", compact("status"));
     }
     public function editefood(Request $request)
     {
-        $food=Food::find($request->only("editefood")["editefood"]);
+        $food = Food::find($request->only("editefood")["editefood"]);
         // dd($request->only("editefood")["editefood"],$food);
         return view("seller.foodedite", compact("food"));
     }
