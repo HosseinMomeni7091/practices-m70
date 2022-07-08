@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\FoodCategory;
+use App\Models\RestCategory;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+
 
 class FoodCategoryController extends Controller
 {
@@ -34,9 +37,14 @@ class FoodCategoryController extends Controller
      * @param  \App\Http\Requests\StoreCategoryRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(Request $request)
     {
-        //
+        $newcategory = FoodCategory::create([
+            "name" => $request->get("name")
+        ]);
+        // $newcategory->save();
+        $foodcategories = FoodCategory::all();
+        return view("admin.foodcategory", compact("foodcategories"));
     }
 
     /**
@@ -45,7 +53,7 @@ class FoodCategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(FoodCategory $category)
     {
         //
     }
@@ -56,7 +64,7 @@ class FoodCategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit(FoodCategory $category)
     {
         //
     }
@@ -68,9 +76,13 @@ class FoodCategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(Request $request, FoodCategory $category)
     {
-        //
+        $res=FoodCategory::find($request->get("editeid"))->update([
+            'name' => $request->get("editevalue"),
+        ]);
+        $foodcategories = FoodCategory::all();
+        return view("admin.foodcategory", compact("foodcategories"));
     }
 
     /**
@@ -79,8 +91,10 @@ class FoodCategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy(Request $request,FoodCategory $category)
     {
-        //
+        $res=FoodCategory::find($request->get("remove"))->delete();
+        $foodcategories = FoodCategory::all();
+        return view("admin.foodcategory", compact("foodcategories"));
     }
 }

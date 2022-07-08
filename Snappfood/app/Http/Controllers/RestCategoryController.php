@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Models\RestCategory;
+use Illuminate\Http\Request;
+
 
 class RestCategoryController extends Controller
 {
@@ -15,7 +17,6 @@ class RestCategoryController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -34,9 +35,15 @@ class RestCategoryController extends Controller
      * @param  \App\Http\Requests\StoreCategoryRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(Request $request)
     {
-        //
+
+        $newcategory = RestCategory::create([
+            "name" => $request->get("name")
+        ]);
+        // $newcategory->save();
+        $restcategories = RestCategory::all();
+        return view("admin.restcategory", compact("restcategories"));
     }
 
     /**
@@ -45,7 +52,7 @@ class RestCategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(RestCategory $category)
     {
         //
     }
@@ -56,9 +63,11 @@ class RestCategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit(RestCategory $category)
     {
-        //
+
+        $restcategories = RestCategory::all();
+        return view("admin.restcategory", compact("restcategories"));
     }
 
     /**
@@ -68,9 +77,13 @@ class RestCategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCategoryRequest $request, Category $category)
+    public function update(Request $request, RestCategory $category)
     {
-        //
+        $res=RestCategory::find($request->get("editeid"))->update([
+            'name' => $request->get("editevalue"),
+        ]);
+        $restcategories = RestCategory::all();
+        return view("admin.restcategory", compact("restcategories"));
     }
 
     /**
@@ -79,8 +92,10 @@ class RestCategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy(Request $request, RestCategory $category)
     {
-        //
+        $res=RestCategory::find($request->get("remove"))->delete();
+        $restcategories = RestCategory::all();
+        return view("admin.restcategory", compact("restcategories"));
     }
 }

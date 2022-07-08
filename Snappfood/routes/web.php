@@ -2,16 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Auth\AuthFormController;
-use App\Http\Controllers\Auth\SellerController;
-use App\Http\Controllers\Auth\AdminController;
-
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CategoryController;
+
+use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\AdminController;
 use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\Auth\SellerController;
+use App\Http\Controllers\FoodCategoryController;
+use App\Http\Controllers\RestCategoryController;
+use App\Http\Controllers\Auth\AuthFormController;
 
 
 /*
@@ -41,9 +44,10 @@ Route::any("/registerform",[AuthFormController::class,"registerform"])->name("re
 
 Route::resource('restaurants', RestaurantController::class);
 Route::resource('foods', FoodController::class);
-// Route::resource('orders', OrderController::class);
+Route::resource('restcategory', RestCategoryController::class);
+Route::resource('foodcategory', FoodCategoryController::class);
+Route::resource('discount', DiscountController::class);
 // Route::resource('comments', CommentController::class);
-// Route::resource('categories', CategoryController::class);
 
 // admincontroller - router
 Route::get("/restaurantCategories",[AdminController::class,"restaurantCategories"])->name("restaurantCategories");

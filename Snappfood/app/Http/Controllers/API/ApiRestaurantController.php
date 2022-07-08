@@ -7,6 +7,7 @@ use App\Models\Restaurant;
 use App\Models\RestCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\Controller;
+use App\Http\Resources\RestaurantResource;
 
 class ApiRestaurantController extends Controller
 {
@@ -24,10 +25,11 @@ class ApiRestaurantController extends Controller
         // ]);
         // $res=Restaurant::where("id",$restaurant_id)->get();
         $res = Restaurant::with("restaddress")->where("id", $restaurant_id)->get();
-        return response()->json([
-            "requested id" => $restaurant_id,
-            "data" => $res
-        ]);
+        return RestaurantResource::collection($res);
+        // return response()->json([
+        //     "requested id" => $restaurant_id,
+        //     "data" => $res
+        // ]);
     }
 
     /**
@@ -83,10 +85,12 @@ class ApiRestaurantController extends Controller
 
         $result = $restaurant->get();
 
-        return response()->json([
-            "requested id" => $condition,
-            "data" => $result
-        ]);
+        return RestaurantResource::collection($result);
+
+        // return response()->json([
+        //     "requested id" => $condition,
+        //     "data" => $result
+        // ]);
     }
     /**
      * Display the specified resource.
