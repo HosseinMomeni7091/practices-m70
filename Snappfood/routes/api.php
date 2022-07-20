@@ -39,10 +39,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     
     Route::post('/carts/add', [ApiOrderController::class, 'addtocart']);
     Route::patch('/carts/add', [ApiOrderController::class, 'update']);
-    Route::get('/carts', [ApiOrderController::class, 'index']);
-    Route::get('/carts/{cart_id}', [ApiOrderController::class, 'show'])->whereNumber("cart_id");
-
     Route::post('/carts/{cart_id}/pay', [ApiOrderController::class, 'pay'])->whereNumber("cart_id");
+    Route::get('/carts/{cart_id}', [ApiOrderController::class, 'show'])->whereNumber("cart_id");
+    Route::get('/carts', [ApiOrderController::class, 'index']);
+
 
     // Route::post('/addresses/{}', [ApiAddressController::class, 'store']);
     // Route::put('/products/{id}', [ProductController::class, 'update']);

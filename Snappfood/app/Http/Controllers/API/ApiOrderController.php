@@ -7,6 +7,8 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\API\Controller;
+use App\Http\Resources\OrderResource;
+
 
 
 class ApiOrderController extends Controller
@@ -18,12 +20,8 @@ class ApiOrderController extends Controller
      */
     public function index()
     {
-        $res = Order::with("restaurant")->where("id", $restaurant_id)->get();
-        // return RestaurantResource::collection($res);
-        return response()->json([
-            "requested id" => $restaurant_id,
-            "data" => $res
-        ]);
+        $res = Order::with("restaurant", "foods")->get();
+        return OrderResource::collection($res);
     }
 
     /**
@@ -53,9 +51,10 @@ class ApiOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($cart_id)
     {
-        //
+        $res = Order::with("restaurant", "foods")->where("id",$cart_id)->get();
+        return OrderResource::collection($res);
     }
 
     /**
@@ -94,12 +93,12 @@ class ApiOrderController extends Controller
                 'cost' => ($foodPrice) * ($request->get("count")),
             ]);
 
-            $cartID=$result->id;
+            $cartID = $result->id;
 
             $result->foods()->attach($request->get("food_id"), ["count" => $request->get("count")]);
         } else {
             $currentCart = $cartInfo->get()->first();
-            $cartID=$currentCart->id;
+            $cartID = $currentCart->id;
 
             // add to pivot table food_order
             $currentCart->foods()->attach($request->get("food_id"), ["count" => $request->get("count")]);
@@ -143,11 +142,11 @@ class ApiOrderController extends Controller
                 'quantity' => $request->get("count"),
                 'cost' => $foodPrice,
             ]);
-            $cartID=$result->id;
+            $cartID = $result->id;
             $result->foods()->attach($request->get("food_id"), ["count" => $request->get("count")]);
         } else {
             $currentCart = $cartInfo->get()->first();
-            $cartID=$currentCart->id;
+            $cartID = $currentCart->id;
 
             $previousValue = DB::table("food_order")->where([["order_id", $currentCart->id], ["food_id", $request->get("food_id")]])->get()->first()->count;
 
@@ -202,8 +201,18 @@ class ApiOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function pay($id)
+    public function pay($cart_id)
     {
-        //
+        
+        $currentCart = Order::where("id",$cart_id)->get()->first();
+        $currentCart->update([
+            'status' => "paid",
+        ]);
+        $currentCart->save();
+        // return OrderResource::collection($currentCart);
+        return [
+            "massage" => "Status of order improved to Paid.",
+            "data" => $currentCart,
+        ];
     }
 }
