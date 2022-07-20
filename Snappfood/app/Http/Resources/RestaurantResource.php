@@ -18,7 +18,7 @@ class RestaurantResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'anme' => $this->name,
+            'name' => $this->name,
             'phone' => $this->phone,
             'freight' => $this->freight,
             'score' => $this->score,

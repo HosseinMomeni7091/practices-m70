@@ -19,10 +19,10 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer("cost");
+            $table->integer("cost")->default("0");
             $table->integer("quantity")->nullable();
-            $table->string("status");
-            // $table->enum("status",array("progressing","preparating","Delivering","Delivered"));
+            $table->string("status")->default("ordering");
+            // $table->enum("status",array("paid","progressing","preparating","Delivering","Delivered"));
             $table->foreignIdFor(User::class)->nullable();
             $table->foreignIdFor(Discount::class)->nullable();
             $table->foreignIdFor(Restaurant::class)->nullable();

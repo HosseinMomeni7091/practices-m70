@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ApiAuthController;
+use App\Http\Controllers\API\ApiOrderController;
 use App\Http\Controllers\API\ApiAddressController;
 use App\Http\Controllers\API\ApiRestaurantController;
 
@@ -34,6 +35,15 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/restaurants/{restaurant_id}', [ApiRestaurantController::class, 'index']);
     Route::get('/restaurants', [ApiRestaurantController::class, 'show']);
     Route::get('/restaurants/{restaurant_id}/foods', [ApiRestaurantController::class, 'showFood']);
+
+    
+    Route::post('/carts/add', [ApiOrderController::class, 'addtocart']);
+    Route::patch('/carts/add', [ApiOrderController::class, 'update']);
+    Route::get('/carts', [ApiOrderController::class, 'index']);
+    Route::get('/carts/{cart_id}', [ApiOrderController::class, 'show'])->whereNumber("cart_id");
+
+    Route::post('/carts/{cart_id}/pay', [ApiOrderController::class, 'pay'])->whereNumber("cart_id");
+
     // Route::post('/addresses/{}', [ApiAddressController::class, 'store']);
     // Route::put('/products/{id}', [ProductController::class, 'update']);
     // Route::delete('/products/{id}', [ProductController::class, 'destroy']);

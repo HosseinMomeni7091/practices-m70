@@ -62,6 +62,12 @@ class DatabaseSeeder extends Seeder
             'phone' => "09193337479",
             'role' => "buyer",
             'email' => "hossein.momeni7093@yahoo.com",
+            'password' => Hash::make("123")],
+
+            ['name' => "hossein",
+            'phone' => "09193337480",
+            'role' => "buyer",
+            'email' => "hossein.momeni70@yahoo.com",
             'password' => Hash::make("123")]
         ]);
         // User::factory(10)->create();

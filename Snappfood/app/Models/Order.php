@@ -25,6 +25,10 @@ class Order extends Model
     {
         return $this->belongsTo(Restaurant::class);
     }
+    // public function ifff()
+    // {
+    //     return $this->belongsTo(Restaurant::class)->where([["restaurant_id",$restId],["user_id",auth()->user()->id],["status","ordering"]]);
+    // }
     public function user()
     {
         return $this->belongsTo(User::class);

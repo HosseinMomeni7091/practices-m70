@@ -12,18 +12,12 @@ use App\Http\Resources\RestaurantResource;
 class ApiRestaurantController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display  listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index($restaurant_id)
     {
-        // $res=Restaurant::find($restaurant_id)->restaddress;
-        // return response()->json([
-        //     "requested id"=> $restaurant_id,
-        //     "data"=>$res
-        // ]);
-        // $res=Restaurant::where("id",$restaurant_id)->get();
         $res = Restaurant::with("restaddress")->where("id", $restaurant_id)->get();
         return RestaurantResource::collection($res);
         // return response()->json([
@@ -86,11 +80,6 @@ class ApiRestaurantController extends Controller
         $result = $restaurant->get();
 
         return RestaurantResource::collection($result);
-
-        // return response()->json([
-        //     "requested id" => $condition,
-        //     "data" => $result
-        // ]);
     }
     /**
      * Display the specified resource.
@@ -101,7 +90,6 @@ class ApiRestaurantController extends Controller
     public function showFood($restaurant_id)
     {
         $foods = Food::where("restaurant_id", $restaurant_id)->get();
-        // $foods=Food::all();
         return response($foods);
     }
 
