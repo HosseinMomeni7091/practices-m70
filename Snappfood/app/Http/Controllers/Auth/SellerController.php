@@ -3,20 +3,31 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\Food;
-use App\Models\FoodCategory;
+use App\Models\Order;
 use App\Models\Restaurant;
+use App\Models\FoodCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class SellerController extends Controller
 {
     public function currentOrders()
-    {
-        // return view('loginform')->with("message","Please fill the following form");
+    {   
+        $result = Order::with("restaurant","user","foods")->where("restaurant_id",auth()->user()->restaurant->id)->where("status","!=","Delivered")->get();
+        return view("seller.currentorder",compact("result"));
+
+    }
+    public function detailCurrentOrders(Request $request)
+    {   
+        $result = Order::with("restaurant","user","foods")->where("id",$request->orderId)->get()->first();
+        // dd($result->foods);
+        return view("seller.detailcurrentorder",compact("result"));
+
     }
     public function completedOrders()
     {
-        // return view('registerform')->with("message","Please fill the following form");
+        $result = Order::with("restaurant","user","foods")->where("restaurant_id",auth()->user()->restaurant->id)->where("status","Delivered")->get();
+        return view("seller.completeorder",compact("result"));
     }
     public function sellReport()
     {

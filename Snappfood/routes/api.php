@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\ApiAuthController;
 use App\Http\Controllers\API\ApiOrderController;
 use App\Http\Controllers\API\ApiAddressController;
+use App\Http\Controllers\API\ApiCommentController;
 use App\Http\Controllers\API\ApiRestaurantController;
 
 /*
@@ -42,6 +43,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/carts/{cart_id}/pay', [ApiOrderController::class, 'pay'])->whereNumber("cart_id");
     Route::get('/carts/{cart_id}', [ApiOrderController::class, 'show'])->whereNumber("cart_id");
     Route::get('/carts', [ApiOrderController::class, 'index']);
+    
+    
+    Route::get('/comments', [ApiCommentController::class, 'show']);
+    Route::post('/comments', [ApiCommentController::class, 'store']);
+
 
 
     // Route::post('/addresses/{}', [ApiAddressController::class, 'store']);

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string("comment");
             $table->string("reply")->nullable();
             $table->integer("score")->default(5);
-            $table->boolean("is_accept")->default(false);
+            $table->enum("status",["waiting", "approved","delete request","deleted"])->default("waiting");
             $table->boolean("delete_request")->default(false);;
             $table->foreignIdFor(Order::class)->nullable();
             $table->foreignIdFor(User::class)->nullable();

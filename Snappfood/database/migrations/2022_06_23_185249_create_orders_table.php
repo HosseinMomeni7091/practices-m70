@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer("cost")->default("0");
             $table->integer("quantity")->nullable();
             $table->string("status")->default("ordering");
-            // $table->enum("status",array("paid","progressing","preparating","Delivering","Delivered"));
+            // $table->enum("status",array("paid","progressing","preparing","Delivering","Delivered"));
             $table->foreignIdFor(User::class)->nullable();
             $table->foreignIdFor(Discount::class)->nullable();
             $table->foreignIdFor(Restaurant::class)->nullable();

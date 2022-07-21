@@ -59,6 +59,7 @@ Route::get("/advertisements",[AdminController::class,"advertisements"])->name("a
 
 // sellercontroller - router
 Route::get("/currentOrders",[SellerController::class,"currentOrders"])->name("currentOrders");
+Route::get("/detailCurrentOrders",[SellerController::class,"detailCurrentOrders"])->name("detailCurrentOrders");
 Route::get("/completedOrders",[SellerController::class,"completedOrders"])->name("completedOrders");
 Route::get("/sellReport",[SellerController::class,"sellReport"])->name("sellReport");
 Route::get("/allfoods",[SellerController::class,"foods"])->name("allfoods");
