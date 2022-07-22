@@ -20,8 +20,18 @@ class SellerController extends Controller
     public function detailCurrentOrders(Request $request)
     {   
         $result = Order::with("restaurant","user","foods")->where("id",$request->orderId)->get()->first();
-        // dd($result->foods);
         return view("seller.detailcurrentorder",compact("result"));
+
+    }
+    public function UpdateOrderStatus(Request $request)
+    {   
+        // Update order
+        $update = Order::where("id",$request->orderId)->update(["status"=>$request->status]);
+        // $update->save();
+
+        // Get full info
+        $result = Order::with("restaurant","user","foods")->where("restaurant_id",auth()->user()->restaurant->id)->where("status","!=","Delivered")->get();
+        return view("seller.currentorder",compact("result"));
 
     }
     public function completedOrders()

@@ -17,7 +17,7 @@ class CommentResource extends JsonResource
         $foods = $this->order->foods;
         $all = [];
         foreach ($foods as $key => $food) {
-            $all[] = [ $key+1 => $food->name];
+            $all[$key+1] =  $food->name;
         }
         return [
             "Id" => $this->id,
