@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Food;
 use App\Models\Order;
+use App\Models\Comment;
 use App\Models\Restaurant;
 use App\Models\FoodCategory;
 use Illuminate\Http\Request;
@@ -66,7 +67,44 @@ class SellerController extends Controller
     }
     public function sellerComments()
     {
-        // return view('registerform')->with("message","Please fill the following form");
+        $foodinfos = Food::whereBelongsTo(auth()->user()->restaurant)->get();
+        $result=Order::with("foods")->whereBelongsTo(auth()->user()->restaurant)->has('comments')->get();
+        return view("seller.comments",compact("result","foodinfos"));
+    }
+    public function searchCommentOfFood(Request $request)
+    {
+        $foodId=$request->foodidfilter;
+        $foodinfos = Food::whereBelongsTo(auth()->user()->restaurant)->get();
+        $result=Order::whereBelongsTo(auth()->user()->restaurant)->whereRelation("foods","food_id",$foodId)->has('comments')->get();
+        if(($request->foodidfilter)=="all"){
+            $result=Order::whereBelongsTo(auth()->user()->restaurant)->has('comments')->get();
+        }
+        return view("seller.comments",compact("result","foodinfos"));
+    }
+    public function comments(Request $request)
+    {
+        $comments=Comment::where('order_id',$request->orderId)->get();
+        $orderId=$request->orderId;
+        // dd($comments);
+        return view("seller.detailcomments",compact("comments","orderId"));
+    }
+    public function updateCommentStatus(Request $request)
+    {
+        $update=Comment::where("id",$request->comment_id)->update([
+            "status"=>$request->status
+        ]);
+        $orderId=$request->orderId;
+        $comments=Comment::where('order_id',$request->orderId)->get();
+        return view("seller.detailcomments",compact("comments","orderId"));
+    }
+    public function sendCommentReply(Request $request)
+    {
+        $update=Comment::where("id",$request->comment_id)->update([
+            "reply"=>$request->reply
+        ]);
+        $orderId=$request->orderId;
+        $comments=Comment::where('order_id',$request->orderId)->get();
+        return view("seller.detailcomments",compact("comments","orderId"));
     }
     public function foodParty()
     {

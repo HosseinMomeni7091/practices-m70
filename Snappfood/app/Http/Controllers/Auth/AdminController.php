@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Comment;
 use App\Models\Discount;
 use App\Models\FoodCategory;
 use App\Models\RestCategory;
@@ -26,7 +27,10 @@ class AdminController extends Controller
     }
     public function comments()
     {
-        // return view('registerform')->with("message","Please fill the following form");
+      $comments=Comment::with(["order"=>fn($order)=>$order::with("restaurant")],"user")->where("status","delete request")->get();
+      dd($comments);
+      return view("admin.comments",compact("comments"));
+
 
     }
     public function advertisements()

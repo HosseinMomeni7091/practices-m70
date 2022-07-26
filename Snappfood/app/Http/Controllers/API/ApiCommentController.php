@@ -38,20 +38,24 @@ class ApiCommentController extends Controller
 
     public function store(Request $request)
     {
-        if ((auth()->user()->id) == (Order::find($request->cart_id)->get()->first()->user_id)) {
-            if ((Order::find($request->cart_id)->get()->first()->status) == "Delivered") {
-                $Comment = Comment::create([
-                    "order_id" => $request->cart_id,
-                    "user_id" => auth()->user()->id,
-                    "score" => $request->score,
-                    "comment" => $request->massage,
-                ]);
-                return ["data" => $Comment];
+        if ((auth()->user()->id) == (Order::where("id",$request->cart_id)->get()->first()->user_id)) {
+            if ((Order::where("id",$request->cart_id)->get()->first()->status) == "Delivered") {
+                if ((Comment::where("order_id",$request->cart_id)->where("user_id",auth()->user()->id)->get()->isNotEmpty())){
+                    return ["massage" => "You already sent your reply"];
+                }else{
+                    $Comment = Comment::create([
+                        "order_id" => $request->cart_id,
+                        "user_id" => auth()->user()->id,
+                        "score" => $request->score,
+                        "comment" => $request->massage,
+                    ]);
+                    return ["data" => $Comment];
+                }
             } else {
                 return ["massage" => "Your order don't be delivered, Dada!! First Taste it then send your steemed feedback"];
             }
         } else {
-            return abort(403);
+           return abort(403);
         }
     }
 }

@@ -60,6 +60,12 @@ Route::get("/advertisements",[AdminController::class,"advertisements"])->name("a
 // sellercontroller - router
 Route::get("/currentOrders",[SellerController::class,"currentOrders"])->name("currentOrders");
 Route::get("/detailCurrentOrders",[SellerController::class,"detailCurrentOrders"])->name("detailCurrentOrders");
+
+Route::get("/comments",[SellerController::class,"comments"])->name("comments");
+Route::post("/searchCommentOfFood",[SellerController::class,"searchCommentOfFood"])->name("searchCommentOfFood");
+Route::get("/updateCommentStatus",[SellerController::class,"updateCommentStatus"])->name("updateCommentStatus");
+Route::get("/sendCommentReply",[SellerController::class,"sendCommentReply"])->name("sendCommentReply");
+
 Route::get("/UpdateOrderStatus",[SellerController::class,"UpdateOrderStatus"])->name("UpdateOrderStatus");
 Route::get("/completedOrders",[SellerController::class,"completedOrders"])->name("completedOrders");
 Route::get("/sellReport",[SellerController::class,"sellReport"])->name("sellReport");
