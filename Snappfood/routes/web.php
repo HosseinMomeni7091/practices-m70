@@ -53,7 +53,8 @@ Route::resource('discount', DiscountController::class);
 Route::get("/restaurantCategories",[AdminController::class,"restaurantCategories"])->name("restaurantCategories");
 Route::get("/foodCategories",[AdminController::class,"foodCategories"])->name("foodCategories");
 Route::get("/discounts",[AdminController::class,"discounts"])->name("discounts");
-Route::get("/comments",[AdminController::class,"comments"])->name("comments");
+Route::get("/adminComments",[AdminController::class,"adminComments"])->name("adminComments");
+Route::get("/actionOnComment",[AdminController::class,"actionOnComment"])->name("actionOnComment");
 Route::get("/advertisements",[AdminController::class,"advertisements"])->name("advertisements");
 
 

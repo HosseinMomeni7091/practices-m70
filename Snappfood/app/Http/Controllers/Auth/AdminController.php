@@ -25,13 +25,16 @@ class AdminController extends Controller
         $discounts=Discount::all();
         return view("admin.discount", compact("discounts"));
     }
-    public function comments()
+    public function adminComments()
     {
-      $comments=Comment::with(["order"=>fn($order)=>$order::with("restaurant")],"user")->where("status","delete request")->get();
-      dd($comments);
+      $comments=Comment::with(["order"=>fn($order)=>$order->with("restaurant"),"user"])->where("status","delete request")->get();
       return view("admin.comments",compact("comments"));
-
-
+    }
+    public function actionOnComment(Request $request)
+    {
+      $update=Comment::where("id",$request->commentId)->update(["status"=>$request->status]);
+      $comments=Comment::with(["order"=>fn($order)=>$order->with("restaurant"),"user"])->where("status","delete request")->get();
+      return view("admin.comments",compact("comments"));
     }
     public function advertisements()
     {

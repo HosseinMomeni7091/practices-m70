@@ -38,26 +38,26 @@
                     {{$key+1}}
                 </td>
                 <td class="py-4 px-6">
-                    {{$order->user->name}}
+                    {{$comment->user->name}}
                 </td>
                 <td class="py-4 px-6">
-                    {{$order->quantity}}
+                    {{$comment->order->restaurant->name}}
                 </td>
                 <td class="py-4 px-6">
-                    {{$order->cost}}
+                    {{$comment->comment}}
                 </td>
                 <td class="py-4 px-6">
-                     @foreach ($order->foods as $food)
-                     {{$food->name}}
-                    @Endforeach
-                </td>
-                <td class="py-4 px-6">
-                    {{$order->status}}
+                    {{$comment->status}}
                 </td>
                 <td class="pt-5 px-6 align-middle">
-                    <form action="{{ route('comments') }}" method="get">
-                        <input type="hidden" name="orderId" value="{{$order->id}}">
-                        <button  class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Comment</button>
+                    <form action="{{ route('actionOnComment') }}" method="get">
+                        <input type="hidden" name="commentId" value="{{$comment->id}}">
+                        <select class="border-2 border-gray-300 rounded-lg" name="status">
+                            <option  selected>{{$comment->status}}</option>
+                            <option value="approved">approved</option>
+                            <option value="deleted">deleted </option>
+                        </select>
+                        <button  class="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-0.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900">Finalize</button>
 
                     </form>
                 </td>
