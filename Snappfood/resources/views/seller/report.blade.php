@@ -11,13 +11,13 @@
     <form action="{{ route('filterOnReport') }}" method="POST">
         @csrf
         <label class="text-lg font-bold " for="">Filter on period</label>
-        <select name="filter">
+        <select class="rounded-lg w-32" name="filter">
             <option selected>{{old('filter')}}</option>
             <option value="all">All</option>
             <option value="lastWeek">Last Week</option>
             <option value="lastMonth">Last Month</option>
         </select>
-        <button class="w-32 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-4 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Filter</button>
+        <button class="w-32 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-4 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Filter</button>
     </form>
 </div>
 
@@ -102,4 +102,27 @@
 </div>
 
 
+
+<!-- chart -->
+<div class="container w-1/2 h-1/4 mx-auto mt-4 mb-8 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="font-bold text-lg">
+
+                    <h1>{{ $chart1->options['chart_title'] }}</h1>
+                    {!! $chart1->renderHtml() !!}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection()
+
+@section('javascript')
+{!! $chart1->renderChartJsLibrary() !!}
+{!! $chart1->renderJs() !!}
+@endsection

@@ -50,7 +50,8 @@
 
     <!-- body -->
     @yield("body")
-
+    
 </body>
+@yield("javascript")
 
 </html>

@@ -63,6 +63,14 @@
 </form>
 
 
+<!-- Map -->
+<div class="w-1/2 h-1/2 mx-auto my-16">
+    <div class="text-center font-bold">Please Select your exact location on map and press location button accrdingly</div>
+    <div class="border-2 border-gray-100 rounded-xl">
+        <x-maps-leaflet :centerPoint="['long' => 51.336841699404374, 'lat' => 35.69914011873405]" :zoomLevel="11" :markers="[['long' => 51.336841699404374, 'lat' => 35.69914011873405]]"></x-maps-leaflet>
+    </div>
+</div>
+
 
 
 

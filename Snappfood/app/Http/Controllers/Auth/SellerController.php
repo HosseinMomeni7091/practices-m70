@@ -65,13 +65,19 @@ class SellerController extends Controller
         $TotalPriceForAllOrderAfterDiscount=array_sum($TotalOrderPrice);
         $TotalAllOrderQuantity=array_sum($TotalOrderQuantity);
 
+        $restId=auth()->user()->restaurant->id;
         $chart_options = [
             'chart_title' => 'Sell report per day',
             'report_type' => 'group_by_date',
-            'model' => 'App\Models\SellerController',
+            'model' => 'App\Models\Order',
+            'conditions'=> [['name' => 'test', 'condition' => "restaurant_id = $restId", 'color' => 'red', 'fill' => true]],
+            // 'group_by_field' => 'cost',
             'group_by_field' => 'created_at',
             'group_by_period' => 'day',
-            'chart_type' => 'bar',
+            'aggregate_function' => 'sum',
+            'aggregate_field' => 'cost',
+            // 'group_by_period' => 'day',
+            'chart_type' => 'line',
         ];
         $chart1 = new LaravelChart($chart_options);
 
@@ -81,12 +87,15 @@ class SellerController extends Controller
     {
         if ($request->filter=="all"){
             $orders = Order::whereBelongsTo(auth()->user()->restaurant)->whereIn("status",["Delivering","Delivered"])->get();
+            $filterday=700;
         }
         if ($request->filter=="lastWeek"){
             $orders = Order::whereBelongsTo(auth()->user()->restaurant)->whereIn("status",["Delivering","Delivered"])->where("created_at",">",date("Y-m-d H:i:s", time()- 10080 * 60))->get();
+            $filterday=7;
         }
         if ($request->filter=="lastMonth"){
             $orders = Order::whereBelongsTo(auth()->user()->restaurant)->whereIn("status",["Delivering","Delivered"])->where("created_at",">=",date("Y-m-d H:i:s", time() - 43200 * 60))->get();
+            $filterday=30;
         }
 
         // Price and Discount for each order
@@ -109,7 +118,25 @@ class SellerController extends Controller
         $TotalPriceForAllOrderAfterDiscount=array_sum($TotalOrderPrice);
         $TotalAllOrderQuantity=array_sum($TotalOrderQuantity);
 
-        return view("seller.report",compact("orders","TotalOrderPrice","OrderDiscount","TotalPrice","TotalPriceForAllOrder","TotalDiscountForAllOrder","TotalPriceForAllOrderAfterDiscount","TotalAllOrderQuantity"));
+        $restId=auth()->user()->restaurant->id;
+        $chart_options = [
+            'chart_title' => 'Sell report per day',
+            'report_type' => 'group_by_date',
+            'model' => 'App\Models\Order',
+            'conditions'=> [['name' => 'test', 'condition' => "restaurant_id = $restId", 'color' => 'red', 'fill' => true]],
+            // 'group_by_field' => 'cost',
+            'group_by_field' => 'created_at',
+            'group_by_period' => 'day',
+            'aggregate_function' => 'sum',
+            'aggregate_field' => 'cost',
+            'chart_type' => 'line',
+            'filter_field' => 'created_at',
+            'filter_days' => $filterday, // show only transactions for last 30 
+            'continuous_time' => true, // show continuous timeline including dates without data
+        ];
+        $chart1 = new LaravelChart($chart_options);
+
+        return view("seller.report",compact("orders","TotalOrderPrice","OrderDiscount","TotalPrice","TotalPriceForAllOrder","TotalDiscountForAllOrder","TotalPriceForAllOrderAfterDiscount","TotalAllOrderQuantity","chart1"));
     }
     public function foods(Request $request)
     {
