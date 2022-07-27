@@ -9,6 +9,7 @@ use App\Models\Restaurant;
 use App\Models\FoodCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 
 class SellerController extends Controller
 {
@@ -42,7 +43,73 @@ class SellerController extends Controller
     }
     public function sellReport()
     {
-        // return view('registerform')->with("message","Please fill the following form");
+        $orders = Order::whereBelongsTo(auth()->user()->restaurant)->whereIn("status",["Delivering","Delivered"])->get();
+        
+        // Price and Discount for each order
+        $TotalPrice=array_fill(0,count($orders),0);
+        $TotalOrderPrice=array_fill(0,count($orders),0);
+        $TotalOrderQuantity=array_fill(0,count($orders),0);
+        $OrderDiscount=array_fill(0,count($orders),0);
+        foreach ($orders as $key=>$order) {
+            foreach ($order->foods as $food) {
+                $TotalPrice[$key]+=($food->price)*($food->pivot->count);
+                $OrderDiscount[$key]+=($food->price)*($food->pivot->count)*(($food->discount)/100);
+            }
+            $TotalOrderPrice[$key]=(($order->discount ?? 100)/100)*(($TotalPrice[$key])-$OrderDiscount[$key]);
+            $TotalOrderQuantity[$key]+=$order->quantity;
+        }
+
+        // Accumulative values 
+        $TotalPriceForAllOrder=array_sum($TotalPrice);
+        $TotalDiscountForAllOrder=array_sum($OrderDiscount);
+        $TotalPriceForAllOrderAfterDiscount=array_sum($TotalOrderPrice);
+        $TotalAllOrderQuantity=array_sum($TotalOrderQuantity);
+
+        $chart_options = [
+            'chart_title' => 'Sell report per day',
+            'report_type' => 'group_by_date',
+            'model' => 'App\Models\SellerController',
+            'group_by_field' => 'created_at',
+            'group_by_period' => 'day',
+            'chart_type' => 'bar',
+        ];
+        $chart1 = new LaravelChart($chart_options);
+
+        return view("seller.report",compact("orders","TotalOrderPrice","OrderDiscount","TotalPrice","TotalPriceForAllOrder","TotalDiscountForAllOrder","TotalPriceForAllOrderAfterDiscount","TotalAllOrderQuantity","chart1"));
+    }
+    public function filterOnReport(Request $request)
+    {
+        if ($request->filter=="all"){
+            $orders = Order::whereBelongsTo(auth()->user()->restaurant)->whereIn("status",["Delivering","Delivered"])->get();
+        }
+        if ($request->filter=="lastWeek"){
+            $orders = Order::whereBelongsTo(auth()->user()->restaurant)->whereIn("status",["Delivering","Delivered"])->where("created_at",">",date("Y-m-d H:i:s", time()- 10080 * 60))->get();
+        }
+        if ($request->filter=="lastMonth"){
+            $orders = Order::whereBelongsTo(auth()->user()->restaurant)->whereIn("status",["Delivering","Delivered"])->where("created_at",">=",date("Y-m-d H:i:s", time() - 43200 * 60))->get();
+        }
+
+        // Price and Discount for each order
+        $TotalPrice=array_fill(0,count($orders),0);
+        $TotalOrderPrice=array_fill(0,count($orders),0);
+        $TotalOrderQuantity=array_fill(0,count($orders),0);
+        $OrderDiscount=array_fill(0,count($orders),0);
+        foreach ($orders as $key=>$order) {
+            foreach ($order->foods as $food) {
+                $TotalPrice[$key]+=($food->price)*($food->pivot->count);
+                $OrderDiscount[$key]+=($food->price)*($food->pivot->count)*(($food->discount)/100);
+            }
+            $TotalOrderPrice[$key]=(($order->discount ?? 100)/100)*(($TotalPrice[$key])-$OrderDiscount[$key]);
+            $TotalOrderQuantity[$key]+=$order->quantity;
+        }
+
+        // Accumulative values 
+        $TotalPriceForAllOrder=array_sum($TotalPrice);
+        $TotalDiscountForAllOrder=array_sum($OrderDiscount);
+        $TotalPriceForAllOrderAfterDiscount=array_sum($TotalOrderPrice);
+        $TotalAllOrderQuantity=array_sum($TotalOrderQuantity);
+
+        return view("seller.report",compact("orders","TotalOrderPrice","OrderDiscount","TotalPrice","TotalPriceForAllOrder","TotalDiscountForAllOrder","TotalPriceForAllOrderAfterDiscount","TotalAllOrderQuantity"));
     }
     public function foods(Request $request)
     {

@@ -67,6 +67,8 @@ Route::post("/searchCommentOfFood",[SellerController::class,"searchCommentOfFood
 Route::get("/updateCommentStatus",[SellerController::class,"updateCommentStatus"])->name("updateCommentStatus");
 Route::get("/sendCommentReply",[SellerController::class,"sendCommentReply"])->name("sendCommentReply");
 
+Route::post("/filterOnReport",[SellerController::class,"filterOnReport"])->name("filterOnReport");
+
 Route::get("/UpdateOrderStatus",[SellerController::class,"UpdateOrderStatus"])->name("UpdateOrderStatus");
 Route::get("/completedOrders",[SellerController::class,"completedOrders"])->name("completedOrders");
 Route::get("/sellReport",[SellerController::class,"sellReport"])->name("sellReport");
