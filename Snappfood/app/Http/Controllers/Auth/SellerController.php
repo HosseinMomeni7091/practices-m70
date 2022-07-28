@@ -90,7 +90,7 @@ class SellerController extends Controller
             $filterday=700;
         }
         if ($request->filter=="lastWeek"){
-            $orders = Order::whereBelongsTo(auth()->user()->restaurant)->whereIn("status",["Delivering","Delivered"])->where("created_at",">",date("Y-m-d H:i:s", time()- 10080 * 60))->get();
+            $orders = Order::whereBelongsTo(auth()->user()->restaurant)->whereIn("status",["Delivering","Delivered"])->where("created_at",">=",date("Y-m-d H:i:s", time()- 10080 * 60))->get();
             $filterday=7;
         }
         if ($request->filter=="lastMonth"){

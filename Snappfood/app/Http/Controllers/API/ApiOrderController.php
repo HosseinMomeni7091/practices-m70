@@ -83,6 +83,7 @@ class ApiOrderController extends Controller
 
         $restId = Food::find($request->get("food_id"))->restaurant->id;
         $foodPrice = Food::find($request->get("food_id"))->get()->first()->price;
+        $foodDiscount = Food::find($request->get("food_id"))->get()->first()->discount;
         $cartInfo = Order::where([["restaurant_id", $restId], ["user_id", auth()->user()->id], ["status", "ordering"]]);
 
         if ($cartInfo->get()->isEmpty()) {
@@ -90,11 +91,9 @@ class ApiOrderController extends Controller
                 'user_id' => auth()->user()->id,
                 'restaurant_id' => $restId,
                 'quantity' => $request->get("count"),
-                'cost' => ($foodPrice) * ($request->get("count")),
+                'cost' => ($foodPrice) * ($request->get("count"))*(100-$foodDiscount)/100,
             ]);
-
             $cartID = $result->id;
-
             $result->foods()->attach($request->get("food_id"), ["count" => $request->get("count")]);
         } else {
             $currentCart = $cartInfo->get()->first();
@@ -106,7 +105,7 @@ class ApiOrderController extends Controller
             // Update current cart
             $currentCart->update([
                 'quantity' => ($currentCart->quantity) + ($request->get("count")),
-                'cost' => ($currentCart->cost) + (($foodPrice) * ($request->get("count"))),
+                'cost' => ($currentCart->cost) + (($foodPrice) * ($request->get("count"))*((100-$foodDiscount)/100)),
             ]);
         }
 
@@ -133,6 +132,7 @@ class ApiOrderController extends Controller
 
         $restId = Food::find($request->get("food_id"))->restaurant->id;
         $foodPrice = Food::find($request->get("food_id"))->get()->first()->price;
+        $foodDiscount = Food::find($request->get("food_id"))->get()->first()->discount;
         $cartInfo = Order::where([["restaurant_id", $restId], ["user_id", auth()->user()->id], ["status", "ordering"]]);
 
         if ($cartInfo->get()->isEmpty()) {
