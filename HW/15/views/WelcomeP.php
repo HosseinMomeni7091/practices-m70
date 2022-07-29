@@ -1,1 +1,0 @@
-<h1>Welcome <?php echo $list["name"]."   ".$list["family"]."(Patient)" ?></h1>

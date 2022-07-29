@@ -1,20 +1,10 @@
 # ![Laravel Example App](logo.png)
 
-
-
-> ### Example Laravel codebase containing real world examples (CRUD, auth, advanced patterns and more) that adheres to the [RealWorld](https://github.com/gothinkster/realworld-example-apps) spec and API.
-
-This repo is functionality complete — PRs and issues welcome!
-
-----------
-
 # Getting started
 
 ## Installation
 
 Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/5.4/installation#installation)
-
-Alternative installation is possible without local dependencies relying on [Docker](#docker). 
 
 Clone the repository
 

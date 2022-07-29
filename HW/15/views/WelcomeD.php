@@ -1,1 +1,0 @@
-<h1 class="ml-4 font-extrabold">Welcome <?php echo "Dr. ".$list["name"]." ".$list["family"] ?></h1>
