@@ -11,7 +11,7 @@
     <form action="{{ route('allfoods') }}" method="POST">
         @csrf
         <label class="text-lg font-bold " for="">Name :</label>
-        <input class="w-64 h-10 rounded-md p-2 " type="text" name="namesearch">
+        <input class="w-64 h-10 rounded-md p-2 " type="text" name="namesearch" value="{{ old('namesearch') ?? $namesearch ?? '' }}">
         <button class="w-32 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
     </form>
     <form action="{{ route('allfoods') }}" method="POST">

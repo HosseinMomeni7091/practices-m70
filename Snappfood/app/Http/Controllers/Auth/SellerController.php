@@ -173,14 +173,17 @@ class SellerController extends Controller
         $categories = FoodCategory::select(["name", "id"])->get();
         if (isset(auth()->user()->restaurant->id)){
             if ($request->only("namesearch") != []) {
-                $foodinfos = Food::whereBelongsTo(auth()->user()->restaurant)->where("name", $request->only("namesearch")["namesearch"])->get();
-                return view("seller.fooddashboard", compact("foodinfos", "categories"));
+                $word="%".$request->only('namesearch')['namesearch']."%";
+                $foodinfos = Food::whereBelongsTo(auth()->user()->restaurant)->where("name","like", $word)->get();
+                $namesearch=$request->only("namesearch")["namesearch"];
+                return view("seller.fooddashboard", compact("foodinfos", "categories","namesearch"));
             }
             if ($request->only("categoryfilter") != []) {
     
                 if ($request->only("categoryfilter")["categoryfilter"] == "all") {
                     $foodinfos = Food::whereBelongsTo(auth()->user()->restaurant)->get();
-                    return view("seller.fooddashboard", compact("foodinfos", "categories"));
+                    $categoryfilter=$request->only("categoryfilter")["categoryfilter"];
+                    return view("seller.fooddashboard", compact("foodinfos", "categories","categoryfilter"));
                 } else {
                     $foodinfos = Food::whereBelongsTo(auth()->user()->restaurant)->where("food_category_id", $request->only("categoryfilter")["categoryfilter"])
                         ->get();
