@@ -12,7 +12,7 @@
         @csrf
         <label class="text-lg font-bold " for="">Filter on period</label>
         <select class="rounded-lg w-32" name="filter">
-            <option selected>{{old('filter')}}</option>
+            <option selected>{{ old('filter') ?? $filter ?? "" }}</option>
             <option value="all">All</option>
             <option value="lastWeek">Last Week</option>
             <option value="lastMonth">Last Month</option>
@@ -102,7 +102,7 @@
 </div>
 
 
-
+@if($status)
 <!-- chart -->
 <div class="container w-1/2 h-1/4 mx-auto mt-4 mb-8 text-center">
     <div class="row justify-content-center">
@@ -110,19 +110,22 @@
             <div class="card">
                 <div class="font-bold text-lg">
 
-                    <h1>{{ $chart1->options['chart_title'] }}</h1>
-                    {!! $chart1->renderHtml() !!}
-
+                    
+                    <h1>{{ $chart1->options['chart_title'] ?? ""}}</h1>
+                    {!!  $chart1->renderHtml() ?? "" !!}
                 </div>
 
             </div>
         </div>
     </div>
 </div>
+@endif
 
 @endsection()
 
-@section('javascript')
-{!! $chart1->renderChartJsLibrary() !!}
-{!! $chart1->renderJs() !!}
-@endsection
+@if($status)
+    @section('javascript')
+    {!! $chart1->renderChartJsLibrary() !!}
+    {!! $chart1->renderJs() !!}
+    @endsection
+@endif

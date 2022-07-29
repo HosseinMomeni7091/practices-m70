@@ -38,9 +38,31 @@
             </div>
             <div class="w-1/3  px-3 m-4">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                    Latitude
+                </label>
+                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" name="latitude" value="{{ old('latitude') ?? $restinfo->restaddress->longitude ?? '54.1212' }}">
+            </div>
+            <div class="w-1/3  px-3 m-4">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                    Longitude
+                </label>
+                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="number" name="longitude" value="{{ old('longitude') ?? $restinfo->restaddress->longitude ?? '34.1212' }}">
+            </div>
+            <div class="w-1/3  px-3 m-4">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
                     Bank Account
                 </label>
                 <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="IR0696000000010324200001" name="bank_account" value="{{ old('bank_account') ??  'IR0696000000010324200001' }}">
+            </div>
+            <div class="w-1/3  px-3 m-4">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                    Restaurant Category 
+                </label>
+                <select class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="category">
+                        @foreach ($restCategory as $item)
+                        <option value="{{$item->id}}">{{$item->name}}</option>
+                        @endforeach
+                    </select>
             </div>
             <div class="w-full mx-28">
                 <label class="block mb-2 text-lg font-bold text-gray-900 dark:text-gray-300" for="file_input">Upload food picture</label>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Restaurant;
+use App\Models\RestAddress;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreRestaurantRequest;
@@ -38,7 +39,38 @@ class RestaurantController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+
+        $restaurant=Restaurant::create([
+            "user_id"=>auth()->user()->id,
+            "name"=>$request->only("name")["name"],
+            "phone"=>$request->only("phone")["phone"],
+            "freight"=>$request->only("freight")["freight"],
+            "rest_category_id"=>$request->only("category")["category"],
+            "bank_account"=>$request->only("bank_account")["bank_account"],
+        ]);
+        if($request->only("address")!=[]){
+
+            $restaddress=RestAddress::create([
+                "address"=>$request->only("address")["address"],
+                "latitude"=>$request->only("latitude")["latitude"],
+                "longitude"=>$request->only("longitude")["longitude"],
+
+            ]);
+
+            $restaurant->update([
+                "rest_address_id"=>$restaddress->id
+            ]);
+        }
+         if($request->file('image')!=null){
+            $path = Storage::putFile('/public/images', $request->file('image'));
+            $path=str_replace("public","storage",$path);
+            $restaurant->update([
+                "picture"=>$path
+            ]);
+        }
+        
+        return view("seller.restaurantCreated");
+
     }
 
     /**
@@ -72,7 +104,6 @@ class RestaurantController extends Controller
      */
     public function update(Request $request, Restaurant $restaurant)
     {
-        // dd($request->file('image'),$request->all());
         if($request->file('image')!=null){
             $path = Storage::putFile('/public/images', $request->file('image'));
             $path=str_replace("public","storage",$path);
@@ -85,12 +116,16 @@ class RestaurantController extends Controller
             "phone"=>$request->only("phone")["phone"],
             "freight"=>$request->only("freight")["freight"],
             "bank_account"=>$request->only("bank_account")["bank_account"],
+            "rest_category_id"=>$request->only("category")["category"],
         ]);
         if($request->only("address")!=[]){
             $restaurant->restaddress()->update([
-                "address"=>$request->only("address")["address"]
+                "address"=>$request->only("address")["address"],
+                "latitude"=>$request->only("latitude")["latitude"],
+                "longitude"=>$request->only("longitude")["longitude"],
             ]);
         }
+        
         return view("seller.editedone");
 
     }

@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('rest_addresses', function (Blueprint $table) {
             $table->id();
             $table->string("address");
-            $table->integer("latitude");
-            $table->integer("longitude");
+            $table->double('latitude', 8, 6);
+            $table->double('longitude', 8, 2);
             $table->timestamps();
         });
     }
