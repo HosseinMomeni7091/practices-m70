@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Schedule;
 use App\Models\Restaurant;
 use App\Models\RestAddress;
 use Illuminate\Http\Request;
@@ -39,6 +40,22 @@ class RestaurantController extends Controller
      */
     public function store(Request $request)
     {
+        $schedule=Schedule::create([
+            "sat_start"=>$request->only("sat_start")["sat_start"] ?? "00:00",
+            "sun_start"=>$request->only("sun_start")["sun_start"] ?? "00:00",
+            "mon_start"=>$request->only("mon_start")["mon_start"] ?? "00:00",
+            "tues_start"=>$request->only("tues_start")["tues_start"] ?? "00:00",
+            "wednes_start"=>$request->only("wednes_start")["wednes_start"] ?? "00:00",
+            "thurs_start"=>$request->only("thurs_start")["thurs_start"] ?? "00:00",
+            "fri_start"=>$request->only("fri_start")["fri_start"] ?? "00:00",
+            "sat_end"=>$request->only("sat_end")["sat_end"] ?? "00:00",
+            "sun_end"=>$request->only("sun_end")["sun_end"] ?? "00:00",
+            "mon_end"=>$request->only("mon_end")["mon_end"] ?? "00:00",
+            "tues_end"=>$request->only("tues_end")["tues_end"] ?? "00:00",
+            "wednes_end"=>$request->only("wednes_end")["wednes_end"] ?? "00:00",
+            "thurs_end"=>$request->only("thurs_end")["thurs_end"] ?? "00:00",
+            "fri_end"=>$request->only("fri_end")["fri_end"] ?? "00:00",
+        ]);
 
         $restaurant=Restaurant::create([
             "user_id"=>auth()->user()->id,
@@ -47,6 +64,7 @@ class RestaurantController extends Controller
             "freight"=>$request->only("freight")["freight"],
             "rest_category_id"=>$request->only("category")["category"],
             "bank_account"=>$request->only("bank_account")["bank_account"],
+            "schedule_id"=>$schedule->id,
         ]);
         if($request->only("address")!=[]){
 
@@ -125,6 +143,22 @@ class RestaurantController extends Controller
                 "longitude"=>$request->only("longitude")["longitude"],
             ]);
         }
+        $restaurant->schedule()->update([
+            "sat_start"=>$request->only("sat_start")["sat_start"] ?? "00:00",
+            "sun_start"=>$request->only("sun_start")["sun_start"] ?? "00:00",
+            "mon_start"=>$request->only("mon_start")["mon_start"] ?? "00:00",
+            "tues_start"=>$request->only("tues_start")["tues_start"] ?? "00:00",
+            "wednes_start"=>$request->only("wednes_start")["wednes_start"] ?? "00:00",
+            "thurs_start"=>$request->only("thurs_start")["thurs_start"] ?? "00:00",
+            "fri_start"=>$request->only("fri_start")["fri_start"] ?? "00:00",
+            "sat_end"=>$request->only("sat_end")["sat_end"] ?? "00:00",
+            "sun_end"=>$request->only("sun_end")["sun_end"] ?? "00:00",
+            "mon_end"=>$request->only("mon_end")["mon_end"] ?? "00:00",
+            "tues_end"=>$request->only("tues_end")["tues_end"] ?? "00:00",
+            "wednes_end"=>$request->only("wednes_end")["wednes_end"] ?? "00:00",
+            "thurs_end"=>$request->only("thurs_end")["thurs_end"] ?? "00:00",
+            "fri_end"=>$request->only("fri_end")["fri_end"] ?? "00:00",
+        ]);
         
         return view("seller.editedone");
 

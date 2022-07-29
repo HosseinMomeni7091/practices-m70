@@ -57,7 +57,7 @@
             </div>
             <div class="w-1/3  px-3 m-4">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
-                    Restaurant Category 
+                    Restaurant Category :(Selected:<span class="text-base text-red-700 font-bold">{{$restinfo->restcategory->name}}) </span>
                 </label>
                 <select class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="category">
                         @foreach ($restCategory as $item)
@@ -65,10 +65,99 @@
                         @endforeach
                     </select>
             </div>
+            <p class="text-center font-bold text-xl mx-auto mt-4 w-full">Schedule</p>
+            <div class="w-full text-center ml-32  flex flex-row flex-wrap">
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Saturday start
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="09:00" name="sat_start" value="{{ old('sat_start') ?? $restinfo->schedule->sat_start ?? '09:00' }}" >
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Sunday start
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="09:00" name="sun_start" value="{{ old('sun_start') ?? $restinfo->schedule->sun_start ?? '09:00' }}" >
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Monday start
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="09:00" name="mon_start" value="{{ old('mon_start') ?? $restinfo->schedule->mon_start ?? '09:00' }}">
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Tuesday start
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="09:00" name="tues_start" value="{{ old('tues_start') ?? $restinfo->schedule->tues_start ?? '09:00' }}" >
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Wednesday start
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="09:00" name="wednes_start" value="{{ old('wednes_start') ?? $restinfo->schedule->wednes_start ?? '09:00' }}">
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Thursady start
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="09:00" name="thurs_start" value="{{ old('thurs_start') ?? $restinfo->schedule->thurs_start ?? '09:00' }}">
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Friday start
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="09:00" name="fri_start" value="{{ old('fri_start') ?? $restinfo->schedule->fri_start ?? '09:00' }}">
+                </div>
+            </div>
+            <div class="w-full text-center ml-32  flex flex-row flex-wrap">
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Saturday End
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="22:00" name="sat_end" value="{{ old('sat_end') ?? $restinfo->schedule->sat_end ?? '09:00' }}">
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Sunday end
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="22:00" name="sun_end" value="{{ old('sun_end') ?? $restinfo->schedule->sun_end ?? '09:00' }}">
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Monday end
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="22:00" name="mon_end" value="{{ old('mon_end') ?? $restinfo->schedule->mon_end ?? '09:00' }}">
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Tuesday end
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="22:00" name="tues_end" value="{{ old('tues_end') ?? $restinfo->schedule->tues_end ?? '09:00' }}">
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Wednesday end
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="22:00" name="wednes_end" value="{{ old('wednes_end') ?? $restinfo->schedule->wednes_end ?? '09:00' }}">
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Thursady end
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="22:00" name="thurs_end" value="{{ old('thurs_end') ?? $restinfo->schedule->thurs_end ?? '09:00' }}">
+                </div>
+                <div class="w-32  px-1 m-1">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-last-name">
+                        Friday end
+                    </label>
+                    <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-last-name" type="text" placeholder="22:00" name="fri_end" value="{{ old('fri_end') ?? $restinfo->schedule->fri_end ?? '09:00' }}">
+                </div>
+            </div>
             @if($restinfo->picture!=null)
-            <div class="inline text-left w-1/3 h-52">
+            <div class="inline text-center mx-auto w-1/3 h-52 mt-4">
                 <div class="font-bold text-lg">Your Image is as below:</div>
-                <img class="rounded-lg" src="{{$restinfo->picture}}" alt="Your image">
+                <img class="rounded-lg mx-auto" src="{{$restinfo->picture}}" alt="Your image">
             </div>
             @endif
             <div class="w-full mx-28">
