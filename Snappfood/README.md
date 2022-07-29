@@ -47,44 +47,24 @@ You can now access the server at http://localhost:8000
     php artisan migrate
     php artisan serve
 ```
-#APi
-The api can be accessed at [http://localhost:8000/api](http://localhost:8000/api).
 
 
-# Code overview
-
-Admin user and pass are as below: 
-
-Username: 
-hossein.momeni@yahoo.com
-
-Password:
-123
-
-## Environment variables
-
-- `.env` - Environment variables can be set in this file
-
-***Note*** : You can quickly set the database information and other variables in this file and have the application fully working.
-
-----------
-
-# Testing API
-
-Run the laravel development server
-
-    php artisan serve
-
-The api can now be accessed at
+The api can be accessed at
 
     http://localhost:8000/api
 
+
+Admin user and pass are as below: 
+
+    Username: 
+    hossein.momeni@yahoo.com
+
+    Password:
+    123
+
+
 You can operate ready api by postman link as below:
-https://www.postman.com/laravel-maktab70/workspace/snappfood/collection/21676315-5b316c05-9253-4f11-95c6-d8528e0efa59?action=share&creator=21676315
 
-Request headers
+    https://www.postman.com/laravel-maktab70/workspace/snappfood/collection/21676315-5b316c05-9253-4f11-95c6-d8528e0efa59?action=share&creator=21676315
 
-| **Required** 	| **Key**              	| **Value**            	|
-|----------	|------------------	|------------------	|
-| Yes      	| Content-Type     	| application/json 	|
-| Yes      	| X-Requested-With 	| XMLHttpRequest   	|
+
