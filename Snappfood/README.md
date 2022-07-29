@@ -1,4 +1,4 @@
-# ![Laravel Example App]
+# ![Snappfood - Laravel]
 
 # Getting started
 
