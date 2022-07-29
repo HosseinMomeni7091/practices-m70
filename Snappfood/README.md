@@ -1,4 +1,4 @@
-# ![Laravel Example App](logo.png)
+# ![Laravel Example App]
 
 # Getting started
 
