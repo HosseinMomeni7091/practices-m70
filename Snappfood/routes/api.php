@@ -22,9 +22,6 @@ use App\Http\Controllers\API\ApiRestaurantController;
 // Public routes
 Route::post('/register', [ApiAuthController::class, 'register']);
 Route::post('/login', [APiAuthController::class, 'login']);
-// Route::get('/products', [ProductController::class, 'index']);
-// Route::get('/products/{id}', [ProductController::class, 'show']);
-// Route::get('/products/search/{name}', [ProductController::class, 'search']);
 
 
 // Protected routes
@@ -48,11 +45,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/comments', [ApiCommentController::class, 'show']);
     Route::post('/comments', [ApiCommentController::class, 'store']);
 
-
-
-    // Route::post('/addresses/{}', [ApiAddressController::class, 'store']);
-    // Route::put('/products/{id}', [ProductController::class, 'update']);
-    // Route::delete('/products/{id}', [ProductController::class, 'destroy']);
     Route::post('/logout', [ApiAuthController::class, 'logout']);
 });
 

@@ -14,6 +14,15 @@ class DiscountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->authorizeResource(Discount::class);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         //
@@ -76,6 +85,8 @@ class DiscountController extends Controller
      */
     public function update(Request $request, Discount $discount)
     {
+        // if we want to map manually(controller's methods to modelpolicy's methods)
+        // $this->authorize('update', $discount);
 
         if($request->get("editevalue1")){
             $res=Discount::find($request->get("editeid"))->update([

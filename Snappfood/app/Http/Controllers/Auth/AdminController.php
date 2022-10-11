@@ -7,6 +7,7 @@ use App\Models\Discount;
 use App\Models\FoodCategory;
 use App\Models\RestCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
 {
@@ -27,8 +28,11 @@ class AdminController extends Controller
     }
     public function adminComments()
     {
-      $comments=Comment::with(["order"=>fn($order)=>$order->with("restaurant"),"user"])->where("status","delete request")->get();
-      return view("admin.comments",compact("comments"));
+      if (Gate::allows('admin-only', Auth()->user())) {
+        $comments=Comment::with(["order"=>fn($order)=>$order->with("restaurant"),"user"])->where("status","delete request")->get();
+        return view("admin.comments",compact("comments"));
+      }
+      abort(403);
     }
     public function actionOnComment(Request $request)
     {

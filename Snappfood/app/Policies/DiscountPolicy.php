@@ -41,7 +41,11 @@ class DiscountPolicy
      */
     public function create(User $user)
     {
-        //
+        if (auth()->check() && $user->role=="admin"){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
@@ -53,7 +57,11 @@ class DiscountPolicy
      */
     public function update(User $user, Discount $discount)
     {
-        //
+        if (auth()->check() && $user->role=="admin"){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
@@ -65,7 +73,11 @@ class DiscountPolicy
      */
     public function delete(User $user, Discount $discount)
     {
-        //
+        if (auth()->check() && $user->role=="admin"){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /**
