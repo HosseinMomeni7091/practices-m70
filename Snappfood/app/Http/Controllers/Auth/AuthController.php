@@ -5,33 +5,35 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreUserRequest;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function login(StoreUserRequest $request)
     {
-        // dd($request->only("email","password"));
-        auth()->attempt($request->only("email","password"));
-        // dd(auth()->check());
-        session(["name" => auth()->user()->name]);
-
-        // dd(auth()->user());
+        if (Auth::attempt($request->only("email","password"))) {
+            session(["name" => auth()->user()->name]);
+            if (auth()->user()->role == "admin"){
+                return view('adminwelcome')->with("message","Welcome Dear Admin");
+            }
+            if (auth()->user()->role == "seller"){
+                return view('sellerwelcome')->with("message","Welcome Dear Seller");
+            }
+            if (auth()->user()->role == "buyer"){
+                return view('userwelcome')->with("message","Welcome Dear Buyr");
+            }
+        }
+ 
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
         
-        if (auth()->user()->role == "admin"){
-            return view('adminwelcome')->with("message","Welcome Dear Admin");
-        }
-        if (auth()->user()->role == "seller"){
-            return view('sellerwelcome')->with("message","Welcome Dear Seller");
-        }
-        if (auth()->user()->role == "buyer"){
-            return view('userwelcome')->with("message","Welcome Dear Buyr");
-        }
     }
 
     public function register(Request $request)
     {
-        // dd($request->all());
         $res = User::create([
             "name" => $request->get('name'),
             "email" => $request->get('email'),
@@ -45,8 +47,6 @@ class AuthController extends Controller
           
         auth()->attempt($request->only("email","password"));
         session(["name" => auth()->user()->name]);
-
-        // dd(auth()->user());
       
         if (auth()->user()->role == "admin"){
             return view('adminwelcome')->with("message","Welcome Dear Admin");
@@ -62,8 +62,10 @@ class AuthController extends Controller
 
     public function logout(Request $request)
   {
-    $request->session()->forget(['name']);
-    auth()->logout();
-    return redirect()->route("home");
+      auth()->logout();
+      $request->session()->invalidate();
+      $request->session()->forget(['name']);
+      $request->session()->regenerateToken();
+      return redirect()->route("home");
   }
 }

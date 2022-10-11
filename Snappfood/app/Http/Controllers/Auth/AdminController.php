@@ -38,7 +38,6 @@ class AdminController extends Controller
     }
     public function advertisements()
     {
-        // return view('registerform')->with("message","Please fill the following form");
 
     }
 }
