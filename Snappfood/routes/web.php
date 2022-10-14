@@ -3,10 +3,11 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\CategoryController;
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\AdminController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Auth\SellerController;
 use App\Http\Controllers\FoodCategoryController;
 use App\Http\Controllers\RestCategoryController;
 use App\Http\Controllers\Auth\AuthFormController;
+use App\Http\Controllers\TestNotificationController;
 
 
 /*
@@ -83,8 +85,13 @@ Route::get("/updateconfiguration",[SellerController::class,"updateconfiguration"
 
 
 
+// emailtest
+Route::get('/emailtest',[EmailController::class, 'SendEmail']);
 
-// Route::any("/Restaurant/category",[RestaurantController::class,"index"])->name("Restaurant_category");
+// Notification Test
+Route::get('/notficationtest',[TestNotificationController::class, 'SendNotification']);
+
+
 
 
 
